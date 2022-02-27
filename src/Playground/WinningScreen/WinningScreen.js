@@ -9,6 +9,7 @@ function WinningScreen() {
   const { state } = useLocation();
   let preGameId = state.gameId;
   let winner = state.winPlayer; 
+  let navigateHere = preGameId ? `/multiplayer/${preGameId}` : '/playsolo';
 
   const navigate = useNavigate();
 
@@ -20,10 +21,10 @@ function WinningScreen() {
     <>
       <div className="winning-background">
         <div className='winner-name-div'>
-          <p className='winner-name'>{winner}</p>
+          <p className='winner-name'>{winner} Win</p>
         </div>
         <div className="winning-screen-btn">
-          <Button onClick={() => navigate(`/play/${preGameId}`)} className="new-game">New Game</Button>
+          <Button onClick={() => navigate(navigateHere)} className="new-game">New Game</Button>
           <Button onClick={() => navigate('/')} className="back">Back</Button>
         </div>
       </div>

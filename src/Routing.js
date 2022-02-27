@@ -1,4 +1,4 @@
-import Playscreen from 'Playground/Playscreen/Playscreen';
+import Multiplayer from 'Playground/Playscreen/Multiplayer';
 import Startscreen from 'Playground/Startscreen/Startscreen';
 import WinningScreen from 'Playground/WinningScreen/WinningScreen';
 import Singleplayer from "Playground/Playscreen/Signleplayer";
@@ -17,7 +17,7 @@ function Routing() {
             </Route>
             {/* <Route path="/:id?" element={<Startscreen />} /> */}
             <Route path="/playsolo" element={<Singleplayer />} />
-            <Route path="/multiplayer/:id" element={<Playscreen />} />
+            <Route path="/multiplayer/:id" element={<Multiplayer />} />
             <Route path="/win" element={<WinningScreen />} />
             <Route path="*" element={<Error404 />} />
           </Routes>

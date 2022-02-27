@@ -20,8 +20,11 @@ function Startscreen(props) {
   const [uID, setUID] = useState();
   const navigate = useNavigate();
 
+  let wWidth = window.innerWidth;
+  let wHeight = window.innerHeight;
+
   const { gameid } = useParams();
-  console.log(gameid);
+
 
   useEffect(() => {
     if (gameid) {
@@ -32,17 +35,13 @@ function Startscreen(props) {
     }
   }, [gameid, uID]);
 
-  console.log();
   useEffect(() => {
     onValue(ref(db, `ping-pong/${uID}`), (snapshot) => {
-      setData(snapshot.val());
-      console.log(snapshot.val());
+        setData(snapshot.val());
     });
   }, [uID]);
 
-  console.log(ishared);
 
-  console.log(uID);
   const gameSessionUrl = window.location.href;
 
   const [modalIsOpen, setIsOpen] = useState(false);
@@ -55,7 +54,6 @@ function Startscreen(props) {
         setIsLoggedin(true);
 
 
-        console.log(data);
         set(ref(db, `ping-pong/${uID}`), {
           players: {
             player1: {
@@ -72,14 +70,16 @@ function Startscreen(props) {
 
           gamestate: {
             ball: {
-              x: "",
-              y: "",
+              x: wWidth / 2.05,
+              y: wHeight / 2.15,
             },
             player1_paddle: {
-              y: "",
+              x: wWidth / 20,
+              y: wHeight / 2.5,
             },
             player2_paddle: {
-              y: "",
+              x: wWidth / 1.067,
+              y: wHeight / 2.5,
             },
             score: {
               player1_score: 0,
@@ -87,6 +87,15 @@ function Startscreen(props) {
             },
           },
           start: false,
+          winner: "",
+          ballspeed:{
+            x:0,
+            y:0
+          },
+          hitpaddle:{
+            left: false,
+            right: false
+          }
         });
       })
       .catch((error) => {

@@ -2,6 +2,7 @@ export const ballHit = (p, cx, cy, rad, rx, ry, rw, rh) => {
   let testX = cx;
   let testY = cy;
 //   hitPad = 1;
+// alert('h')
 
   if (cx < rx) testX = rx;// test left edge
   else if (cx > rx + rw) testX = rx + rw; // right edge

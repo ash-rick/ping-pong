@@ -1,25 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, { useState} from "react";
 import { ballHit } from "util/ballHitPaddle";
 import { aiMove } from "util/comMove";
-import { ref, onValue, update } from "firebase/database";
-
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate} from "react-router-dom";
 import Sketch from "react-p5";
-import { db } from "firebase.js";
-import "./Playscreen.scss";
 
-function Playscreen(props) {
+
+function Singleplayer(props) {
   let wWidth = window.innerWidth;
   let wHeight = window.innerHeight;
 
-//   const { state } = useLocation();
-//   const [startGame, setStartGame] = useState(false);
-  const [ballX, setBallX] = useState(wWidth / 2.05);
-  const [ballY, setBallY] = useState(wHeight / 2.15);
-  const [PaddleY, setPaddleY] = useState(wHeight / 2.5);
-  const [PaddleY2, setPaddleY2] = useState(wHeight / 2.5);
-  const [player1_score, setPlayer1_Score] = useState();
-  const [player2_score, setPlayer2_Score] = useState();
+  let ballX;
+  let ballY;
+  let PaddleY ;
+  let PaddleY2;
+  let player1_score;
+  let player2_score;
  
 
 
@@ -49,6 +44,12 @@ function Playscreen(props) {
   const setup = (p) => {
     p.canvas = p.createCanvas(wWidth, wHeight);
 
+    ballX = wWidth / 2.05;
+    ballY = wHeight / 2.15;
+    PaddleY = wHeight / 2.5;
+    PaddleY2 = wHeight / 2.5;
+    player1_score = 0;
+    player2_score = 0;
     speedx = 0;
     speedy = 0;
     PaddleX = wWidth / 20;
@@ -78,13 +79,9 @@ function Playscreen(props) {
     themeBtn.position(wWidth / 1.22, wHeight / 1.11);
 
     shoWinPlayer = 0;
-    // winPlayerName = "";
   };
 
   const draw = (p, parent) => {
-    ;
-    // }
-
     p.background("RGB(23, 76, 113)");
 
     p.strokeWeight(4);
@@ -119,47 +116,45 @@ function Playscreen(props) {
 
     p.textSize(20);
     p.fill(255, 255, 180);
-    p.text('score:', wWidth / 5, wHeight / 19);
+    p.text(`score:${player1_score}`, wWidth / 6, wHeight / 19);
 
     p.textSize(20);
     p.fill(255, 255, 180);
-    p.text('score:', wWidth / 1.15, wHeight / 19);
+    p.text(`score:${player2_score}`, wWidth / 1.15, wHeight / 19);
 
     p.textSize(25);
     p.fill(255, 255, 255);
     p.text("Difficulty", wWidth / 18, wHeight / 1.06);
-    
 
     ////////////////////winning screen
     if (shoWinPlayer) {
-        navigate("/win", {
-            state: {
-                winPlayer: shoWinPlayer,
-            },
-        });
+      navigate("/win", {
+        state: {
+          winPlayer: shoWinPlayer,
+        },
+      });
     }
     ///////////////////winning screen
 
     //////////////boundary checks
     if (ballX >= wWidth / 1.05) {
       speedy = 0;
-      setBallX(wWidth / 10);
-      setBallY((wHeight - 40) / 2);
-      setPlayer1_Score(prevState => prevState + 1);
+      ballX = wWidth / 2.05;
+      ballY = wHeight / 2.15;
+      player1_score = player1_score + 1;
 
       if (player1_score === 10) {
-        someoneWin('you');
+        someoneWin("you");
       }
     }
     if (ballX <= wWidth / 20) {
       speedy = 0;
-      setBallX(wWidth / 1.1);
-      setBallY((wHeight - 40) / 2);
-
-      setPlayer2_Score((prevState) => prevState + 1);
+      ballX = wWidth / 2.05;
+      ballY = wHeight / 2.15;
+      player2_score = player2_score + 1;
 
       if (player2_score === 10) {
-        someoneWin('computer');
+        someoneWin("computer");
       }
     }
     if (ballY > wHeight / 1.22) {
@@ -176,17 +171,15 @@ function Playscreen(props) {
     p.fill(c);
     p.ellipse(ballX, ballY, 20, 20);
 
-    setBallX(prevState => prevState + speedx);
-    setBallY((prevState) => prevState + speedy);
-
-
     ///////////Controller
-    if (PaddleY - 5 >= wHeight / 7.1 && p.keyIsDown(p.UP_ARROW)) {
-      setPaddleY((prevState) => prevState - 15);
-    } else if (PaddleY + 5 <= wHeight / 1.52 && p.keyIsDown(p.DOWN_ARROW)) {
-      setPaddleY(prevState => prevState + 15);
+
+    if (PaddleY - 5 >= wHeight / 6.9 && p.keyIsDown(p.UP_ARROW)) {
+      PaddleY = PaddleY - 15;
+    } else if (PaddleY + 5 <= wHeight / 1.47 && p.keyIsDown(p.DOWN_ARROW)) {
+      PaddleY = PaddleY + 15;
     }
-    ///////////Controller
+    
+   
 
     ///////////////ractangle paddle
     c = p.color(65);
@@ -199,6 +192,14 @@ function Playscreen(props) {
 
     ////////////////////////////////
 
+
+    ////////////////////ball position update
+
+    ballX = ballX + speedx;
+    ballY = ballY + speedy;
+
+
+    //////////////////////////-ball hit case
     let hitRight = ballHit(p, ballX, ballY, 10, PaddleX2, PaddleY2, 24, 84);
     let hitLeft = ballHit(p, ballX, ballY, 10, PaddleX, PaddleY, 24, 84);
 
@@ -206,8 +207,8 @@ function Playscreen(props) {
       speedx *= -1;
       speedy = dir[Math.round(Math.random())] * Math.random() * 10;
     }
-
-    let col = p.color(163, 183, 193); //use color instead of fill
+    
+    let col = p.color(163, 183, 193);
 
     resetBtn.style("font-size", "30px");
     resetBtn.style("background-color", col);
@@ -220,7 +221,6 @@ function Playscreen(props) {
     themeBtn.style("border", 0);
     themeBtn.style("padding", "4px 1%");
     themeBtn.mousePressed(changeTheme);
-
 
     pauseBtn.style("font-size", "30px");
     pauseBtn.style("background-color", col);
@@ -235,12 +235,11 @@ function Playscreen(props) {
     sel.style("font-size", "20px");
     sel.style("font-weight", "600");
     sel.style("background-color", "RGB(163, 183, 193)");
-    sel.changed(mySelectEvent);
-    
+    sel.changed(chamgeDeficulty);
 
     // for ai move
     if (ballX > wWidth - (100 + Math.floor(Math.random() * followBall))) {
-      setPaddleY2(aiMove(ballY, level_max, level_min, dir));
+      PaddleY2 = aiMove(ballY, level_max, level_min, dir);
     }
   };
 
@@ -266,21 +265,19 @@ function Playscreen(props) {
         startNreset = "start";
         sel.removeAttribute("disabled");
         pauseBtn.hide();
-        setPlayer1_Score(0);
-        setPlayer2_Score(0);
+        player1_score = 0;
+        player2_score = 0;
         PaddleX = wWidth / 20;
-        setPaddleY(wHeight / 2.5);
+        PaddleY = wHeight / 2.5;
         PaddleX2 = wWidth / 1.067;
-        setPaddleY2(wHeight / 2.5);
-        setBallX((wWidth - 35) / 2);
-        setBallY((wHeight - 40) / 2);
+        PaddleY2 = wHeight / 2.5;
+        ballX = ((wWidth - 35) / 2);
+        ballY = ((wHeight - 40) / 2);
         speedx = 0;
         speedy = 0;
 
     } else if (startNreset === "start") {
-        // shoWinPlayer = 0;
-        // setPlayer1_Score(0);
-        // setPlayer2_Score(0);
+       
         speedx = setSpeed ? setSpeed : 10;
         speedy = 0;
 
@@ -309,26 +306,26 @@ function Playscreen(props) {
     }
   };
 
-  const mySelectEvent = () => {
+  const chamgeDeficulty = () => {
     deficulty = sel.selected();
 
     switch (deficulty) {
       case "easy":
-        level_min = 40;
-        level_max = 100;
-        followBall = 100;
+        level_min = 30;
+        level_max = 60;
+        followBall = 150;
         setSpeed = 5;
         break;
       case "medium":
         level_min = 30;
-        level_max = 80;
-        followBall = 120;
+        level_max = 50;
+        followBall = 170;
         setSpeed = 15;
         break;
       case "hard":
         level_min = 20;
-        level_max = 60;
-        followBall = 150;
+        level_max = 40;
+        followBall = 200;
         setSpeed = 25;
         break;
       default:
@@ -346,4 +343,4 @@ function Playscreen(props) {
   );
 }
 
-export default Playscreen;
+export default Singleplayer;
