@@ -1,33 +1,27 @@
-import React, { useEffect } from 'react';
-import { useLocation, useNavigate} from 'react-router-dom';
-import { Button } from '@material-ui/core';
-import {fireConfetti} from 'Playground/WinningScreen/confetti'
-import './WinningScreen.scss'
+import React from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { Button } from "@material-ui/core";
+import "./LoosingScreen.scss";
 
-function WinningScreen() {
-
+function LoosingScreen() {
   const { state } = useLocation();
   let preGameId = state.gameId;
-  let winner = state.winPlayer; 
+  let looser = state.losePlayer;
   let player1 = state.player1;
   let player2 = state.player2;
-  let navigateHere = preGameId ? `/multiplayer/${preGameId}` : '/playsolo';
+  let navigateHere = preGameId ? `/multiplayer/${preGameId}` : "/playsolo";
 
   const navigate = useNavigate();
-
-  useEffect(() => {
-      fireConfetti();
-  },[]);
-
   return (
     <>
       <div className="winning-background">
         <div className="winner-name-div">
-          <p className="winner-name">{winner.name} Win</p>
+          <p className="winner-name">{looser.name} lose the game</p>
         </div>
         <div className="winning-screen-btn">
           <Button
-            onClick={() => navigate(navigateHere, {
+            onClick={() =>
+              navigate(navigateHere, {
                 state: {
                   reset: true,
                   uid: preGameId,
@@ -49,4 +43,4 @@ function WinningScreen() {
   );
 }
 
-export default WinningScreen
+export default LoosingScreen;

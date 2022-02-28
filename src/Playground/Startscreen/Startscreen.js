@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "@material-ui/core";
 import "./Startscreen.scss";
-// import useSound from "use-sound";
 import { uid } from "uid";
-// import boopSfx from "gameSounds/hit.wav";
 import { useNavigate, useParams } from "react-router-dom";
 import Modal from "react-modal";
-import { auth } from "firebase.js";
-import { db } from "firebase.js";
+import { auth } from "Firebase/firebaseconfig.js";
+import { db } from "Firebase/firebaseconfig.js";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { ref, onValue, update, set } from "firebase/database";
 import { CopyToClipboard } from "react-copy-to-clipboard";
+import {setInSession} from 'storage/sessionStorage'
 
 function Startscreen(props) {
  
@@ -38,10 +37,11 @@ function Startscreen(props) {
   useEffect(() => {
     onValue(ref(db, `ping-pong/${uID}`), (snapshot) => {
         setData(snapshot.val());
+        
     });
   }, [uID]);
 
-
+ 
   const gameSessionUrl = window.location.href;
 
   const [modalIsOpen, setIsOpen] = useState(false);
@@ -52,7 +52,7 @@ function Startscreen(props) {
     signInWithPopup(auth, provider)
       .then((result) => {
         setIsLoggedin(true);
-
+        setInSession("user", JSON.stringify({name: result.user.displayName, email: result.user.email}));
 
         set(ref(db, `ping-pong/${uID}`), {
           players: {
@@ -74,11 +74,9 @@ function Startscreen(props) {
               y: wHeight / 2.15,
             },
             player1_paddle: {
-              x: wWidth / 20,
               y: wHeight / 2.5,
             },
             player2_paddle: {
-              x: wWidth / 1.067,
               y: wHeight / 2.5,
             },
             score: {
@@ -87,14 +85,10 @@ function Startscreen(props) {
             },
           },
           start: false,
-          winner: "",
+          winner: {},
           ballspeed:{
             x:0,
             y:0
-          },
-          hitpaddle:{
-            left: false,
-            right: false
           }
         });
       })
@@ -102,7 +96,6 @@ function Startscreen(props) {
         console.log(error);
       });
   };
-
   const customStyles = {
     content: {
       top: "50%",
@@ -150,10 +143,11 @@ function Startscreen(props) {
                 onClick={() =>
                   navigate(`/multiplayer/${uID}`, {
                     state: {
-                      isMultiplayer: true,
+                      reset: false,
                       uid: uID,
                       player1_name: data.players.player1.name,
                       player2_name: data.players.player2.name,
+                      // player1_email: data.players.player1.email,
                     },
                   })
                 }
@@ -188,14 +182,7 @@ function Startscreen(props) {
             {!ishared && (
               <Button
                 className="startscreen-btn"
-                onClick={() =>
-                  navigate("/playsolo", {
-                    state: {
-                      isMultiplayer: false,
-                      uid: uID,
-                    },
-                  })
-                }
+                onClick={() => navigate("/playsolo")}
               >
                 single player
               </Button>

@@ -1,12 +1,10 @@
 export const ballHit = (p, cx, cy, rad, rx, ry, rw, rh) => {
   let testX = cx;
   let testY = cy;
-//   hitPad = 1;
-// alert('h')
 
-  if (cx < rx) testX = rx;// test left edge
+  if (cx < rx) testX = rx; // test left edge
   else if (cx > rx + rw) testX = rx + rw; // right edge
-  if (cy < ry) testY = ry;// top edge
+  if (cy < ry) testY = ry; // top edge
   else if (cy > ry + rh) testY = ry + rh; // bottom edge
 
   let d = p.dist(cx, cy, testX, testY);
