@@ -11,7 +11,7 @@ import { ref, onValue, update, set } from "firebase/database";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import {setInSession} from 'storage/sessionStorage'
 
-function Startscreen(props) {
+function Startscreen() {
  
   const [data, setData] = useState(null);
   const [ishared, setIshared] = useState(false);
@@ -25,6 +25,16 @@ function Startscreen(props) {
   const { gameid } = useParams();
 
 
+ 
+  useEffect(() => {
+    onValue(ref(db, `ping-pong/${uID}`), (snapshot) => {
+        setData(snapshot.val());
+    });
+    return () => {
+      setData(null)
+    }
+  }, [uID]);
+
   useEffect(() => {
     if (gameid) {
       setIshared(true);
@@ -34,14 +44,6 @@ function Startscreen(props) {
     }
   }, [gameid, uID]);
 
-  useEffect(() => {
-    onValue(ref(db, `ping-pong/${uID}`), (snapshot) => {
-        setData(snapshot.val());
-        
-    });
-  }, [uID]);
-
- 
   const gameSessionUrl = window.location.href;
 
   const [modalIsOpen, setIsOpen] = useState(false);
@@ -70,7 +72,7 @@ function Startscreen(props) {
 
           gamestate: {
             ball: {
-              x: wWidth / 2.05,
+              x: wWidth / 2,
               y: wHeight / 2.15,
             },
             player1_paddle: {
@@ -102,10 +104,11 @@ function Startscreen(props) {
       left: "50%",
       right: "auto",
       bottom: "auto",
-      width: "40%",
+      width: "50%",
+      height: "35%",
       marginRight: "-50%",
       transform: "translate(-50%, -50%)",
-      backgroundColor: "rgba(255, 255, 255, 0.9",
+      backgroundColor: "#007272",
     },
     overlay: {
       backgroundColor: "rgba(0, 0, 0, .5)",
@@ -131,13 +134,12 @@ function Startscreen(props) {
             <div>
               {!ishared && (
                 <CopyToClipboard text={`${gameSessionUrl}${uID}`}>
-                  <Button variant="outlined">
+                  <Button className='copy-link-btn' variant="outlined">
                     Copy link to share with your firend
                   </Button>
                 </CopyToClipboard>
               )}
               <Button
-                style={{ margin: "5% 20%" }}
                 variant="contained"
                 className="enter-game-btn"
                 onClick={() =>
@@ -157,19 +159,19 @@ function Startscreen(props) {
             </div>
           ) : (
             <div className="signin-with-google">
-              <Button onClick={() => signInWithGoggle()}>
+              <Button className='g-signin' onClick={() => signInWithGoggle()}>
                 <img
                   src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRxJzbnX4yyb7ekXoUeb4PXTamKvQ78mefFCw&usqp=CAU"
                   alt="google"
-                  height="25%"
-                  width="25%"
+                  height="20%"
+                  width="20%"
                 />
-                Sign in
+                Sign in with Google
               </Button>
             </div>
           )}
           <div className="modal-bottom">
-            <Button style={{ float: "right" }} onClick={() => closeModal()}>
+            <Button className="close-btn" onClick={() => closeModal()}>
               close
             </Button>
           </div>
@@ -184,7 +186,7 @@ function Startscreen(props) {
                 className="startscreen-btn"
                 onClick={() => navigate("/playsolo")}
               >
-                single player
+                singleplayer
               </Button>
             )}
             <Button className="startscreen-btn" onClick={() => setIsOpen(true)}>

@@ -3,6 +3,38 @@
   margin: 0;
   padding: 0;
 }
+.modal-content {
+  .g-signin {
+    background-color:white;
+    color: #007272;
+    &:hover {
+       background-color: whitesmoke;
+    }
+  }
+  .enter-game-btn {
+    background-color: black;
+    color: palegoldenrod;
+    margin: 3% 15%;
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.329);
+      color: palegoldenrod;
+    }
+  }
+  .close-btn {
+    background-color: rgba(0, 0, 0, 0.103);
+    color: blanchedalmond;
+    // margin-top: 5%;
+    float: right;
+  }
+  .copy-link-btn {
+    background-color: blanchedalmond;
+    color: black;
+     &:hover {
+      background-color: rgba(0, 0, 0, 0.329);
+      color: palegoldenrod;
+    }
+  }
+}
 .starting-page {
     width: 100vw;
     height: 100vh;
@@ -16,7 +48,7 @@
     height: 100%;
     .game-name {
         font-size: 80px;
-        text-shadow :6px 6px #000035;
+        text-shadow :3px 4px #008b8b;
         text-align: center;
         color: #fff;
 
@@ -27,14 +59,19 @@
         margin: 2% 0 10% 30%;
         padding: 25px;
         .startscreen-btn {
-            background-color: #000035;
-            color: aliceblue;
+            background-color: #00a6a6;
+            color: black;
             padding: 15px;
+            font-weight: 600;
             margin: 20px 0 20px 50%;
+            transition: all 0.3s ease;
             // width: 25%;
             &:hover {
-                background-color: #000074;
-                // color: aliceblue;
+                background-color: #008b8b62;
+               
+                color: aliceblue;
+                font-size: 15px;
+                font-weight: 600;
                 box-shadow: rgba(0, 0, 0, 0.445) 0px 3px 8px;
             }
         }

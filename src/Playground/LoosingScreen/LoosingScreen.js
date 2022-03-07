@@ -16,7 +16,9 @@ function LoosingScreen() {
     <>
       <div className="winning-background">
         <div className="winner-name-div">
-          <p className="winner-name">{looser.name} lose the game</p>
+          <p className="winner-name">
+            {preGameId ? looser.name : "You "} lose the game
+          </p>
         </div>
         <div className="winning-screen-btn">
           <Button
@@ -32,7 +34,7 @@ function LoosingScreen() {
             }
             className="new-game"
           >
-            New Game
+            Play Again
           </Button>
           <Button onClick={() => navigate("/")} className="back">
             Back

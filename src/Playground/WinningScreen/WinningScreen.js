@@ -23,11 +23,14 @@ function WinningScreen() {
     <>
       <div className="winning-background">
         <div className="winner-name-div">
-          <p className="winner-name">{winner.name} Win</p>
+          <p className="winner-name">
+            {preGameId ? winner.name : 'You '} Win
+          </p>
         </div>
         <div className="winning-screen-btn">
           <Button
-            onClick={() => navigate(navigateHere, {
+            onClick={() =>
+              navigate(navigateHere, {
                 state: {
                   reset: true,
                   uid: preGameId,
@@ -38,7 +41,7 @@ function WinningScreen() {
             }
             className="new-game"
           >
-            New Game
+            Play Again
           </Button>
           <Button onClick={() => navigate("/")} className="back">
             Back
