@@ -1,5 +1,13 @@
 import { ref, update } from "firebase/database";
 import { db } from "Firebase/firebaseconfig.js";
+import {  child, get } from "firebase/database";
+
+
+const getExistingUserData = async (userId) => {
+
+  
+
+}
 
 export const updateFirebase = (keys, value, gameSessionId) => {
   switch (keys) {
@@ -22,7 +30,7 @@ export const updateFirebase = (keys, value, gameSessionId) => {
       update(ref(db, `ping-pong/${gameSessionId}/gamestate/score`), {
         player2_score: value,
       });
-      break;
+      break;                             
     case "PaddleY":
       update(ref(db, `ping-pong/${gameSessionId}/gamestate/player1_paddle`), {
         y: value,
@@ -44,12 +52,12 @@ export const updateFirebase = (keys, value, gameSessionId) => {
       });
       break;
     case "speedx":
-      update(ref(db, `ping-pong/${gameSessionId}/ballspeed`), {
+      update(ref(db, `ping-pong/${gameSessionId}/gamestate/ballspeed`), {
         x: value,
       });
       break;
     case "speedy":
-      update(ref(db, `ping-pong/${gameSessionId}/ballspeed`), {
+      update(ref(db, `ping-pong/${gameSessionId}/gamestate/ballspeed`), {
         y: value,
       });
       break;
@@ -57,3 +65,33 @@ export const updateFirebase = (keys, value, gameSessionId) => {
       break;
   }
 };
+
+export const updateuserList = (userId, gameSessionId, score, totalPlayedGames) => {
+  let playerData;
+  // (async () => {
+  // getExistingUserData(userId).then( val => {
+    // console.log('dfgh', val);
+  // }) 
+  // })();
+  
+  const dbRef = ref(db);
+  get(child(dbRef, `user-list/${userId}`))
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        console.log(snapshot.val());
+        // userData = snapshot.val();
+        playerData = snapshot.val();
+        update(ref(db, `user-list/${userId}`), {
+          total_games: playerData.total_games + 1,
+          gameIds: [...playerData.gameIds, gameSessionId],
+          score: playerData.score + score,
+        });
+      } else {
+        console.log("No data available");
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+  
+}

@@ -63,8 +63,8 @@ function Multiplayer() {
       setPaddleY2(data.gamestate.player2_paddle.y);
       setPlayer1_Score(data.gamestate.score.player1_score);
       setPlayer2_Score(data.gamestate.score.player2_score);
-      setSpeedX(data.ballspeed.x);
-      setSpeedY(data.ballspeed.y);
+      setSpeedX(data.gamestate.ballspeed.x);
+      setSpeedY(data.gamestate.ballspeed.y);
     });
   }, [gameSessionId]);
 
@@ -168,7 +168,7 @@ function Multiplayer() {
     p.rect(PaddleX2, PaddleY2, 20, 80);
 
     ///////////////// set winner
-    if (player1_score === 10) {
+    if (player1_score === 3) {
       updateFirebase(
         "winner",
         {
@@ -254,6 +254,7 @@ function Multiplayer() {
     startBtn.style("border", 0);
     startBtn.style("padding", "4px 15px");
     startBtn.mousePressed(start);
+  
 
     themeBtn.style("font-size", "30px");
     themeBtn.style("background-color", col);

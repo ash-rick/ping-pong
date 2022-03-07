@@ -10,6 +10,7 @@ import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { ref, onValue, update, set } from "firebase/database";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import {setInSession} from 'storage/sessionStorage'
+import Leaderboard from "components/leaderboard/Leaderboard";
 
 function Startscreen() {
  
@@ -24,16 +25,19 @@ function Startscreen() {
 
   const { gameid } = useParams();
 
+  
 
- 
   useEffect(() => {
     onValue(ref(db, `ping-pong/${uID}`), (snapshot) => {
-        setData(snapshot.val());
+      setData(snapshot.val());
+      let obj = snapshot.val();
+      console.log(obj);
     });
     return () => {
       setData(null)
     }
   }, [uID]);
+
 
   useEffect(() => {
     if (gameid) {
@@ -53,9 +57,11 @@ function Startscreen() {
   const signInWithGoggle = () => {
     signInWithPopup(auth, provider)
       .then((result) => {
-        setIsLoggedin(true);
-        setInSession("user", JSON.stringify({name: result.user.displayName, email: result.user.email}));
 
+        setIsLoggedin(true);
+
+        setInSession("user", JSON.stringify({name: result.user.displayName, email: result.user.email}));
+      
         set(ref(db, `ping-pong/${uID}`), {
           players: {
             player1: {
@@ -85,14 +91,26 @@ function Startscreen() {
               player1_score: 0,
               player2_score: 0,
             },
+            ballspeed: {
+              x: 0,
+              y: 0,
+            },
           },
           start: false,
           winner: {},
-          ballspeed:{
-            x:0,
-            y:0
-          }
         });
+
+        let newUserID = result.user.email.replace(/[^a-zA-Z/d]/g, "");
+      
+        set(ref(db, `user-list/${newUserID}`), {
+          name: result.user.displayName,
+          email: result.user.email,
+          dp: result.user.photoURL,
+          total_games: 0,
+          score: 0,
+          gameIds: [uID]
+        });
+       
       })
       .catch((error) => {
         console.log(error);
@@ -123,6 +141,8 @@ function Startscreen() {
 
   return (
     <>
+      <Leaderboard />
+
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={() => closeModal()}
@@ -134,7 +154,7 @@ function Startscreen() {
             <div>
               {!ishared && (
                 <CopyToClipboard text={`${gameSessionUrl}${uID}`}>
-                  <Button className='copy-link-btn' variant="outlined">
+                  <Button className="copy-link-btn" variant="outlined">
                     Copy link to share with your firend
                   </Button>
                 </CopyToClipboard>
@@ -159,7 +179,7 @@ function Startscreen() {
             </div>
           ) : (
             <div className="signin-with-google">
-              <Button className='g-signin' onClick={() => signInWithGoggle()}>
+              <Button className="g-signin" onClick={() => signInWithGoggle()}>
                 <img
                   src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRxJzbnX4yyb7ekXoUeb4PXTamKvQ78mefFCw&usqp=CAU"
                   alt="google"

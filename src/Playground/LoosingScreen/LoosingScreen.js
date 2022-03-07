@@ -17,7 +17,7 @@ function LoosingScreen() {
       <div className="winning-background">
         <div className="winner-name-div">
           <p className="winner-name">
-            {preGameId ? looser.name : "You "} lose the game
+            {preGameId ? looser.name : "You "} lost the game
           </p>
         </div>
         <div className="winning-screen-btn">
