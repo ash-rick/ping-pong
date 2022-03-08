@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@material-ui/core";
+import { getFromSession } from "storage/sessionStorage";
+import { updateuserList } from "Firebase/updateFirebase"; 
+
 import "./LoosingScreen.scss";
 
 function LoosingScreen() {
@@ -9,7 +12,25 @@ function LoosingScreen() {
   let looser = state.losePlayer;
   let player1 = state.player1;
   let player2 = state.player2;
+  let player1_score = state.player1_score;
+  let player2_score = state.player2_score;
+  let user = JSON.parse(getFromSession("user"));
+  let user_email_id = user.email.replace(/[^a-zA-Z/d]/g, "");
+
   let navigateHere = preGameId ? `/multiplayer/${preGameId}` : "/playsolo";
+
+  useEffect(() => {
+    console.log('lost')
+    updateuserList(
+      user_email_id,
+      preGameId,
+      0,
+      1,
+      'lost',
+      player1_score,
+      player2_score
+    );
+  })
 
   const navigate = useNavigate();
   return (

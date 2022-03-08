@@ -14,15 +14,26 @@ function WinningScreen() {
   let winner = state.winPlayer; 
   let player1 = state.player1;
   let player2 = state.player2;
+  let player1_score = state.player1_score;
+  let player2_score = state.player2_score;
   let navigateHere = preGameId ? `/multiplayer/${preGameId}` : '/playsolo';
   let user = JSON.parse(getFromSession("user"));
   let user_email_id = user.email.replace(/[^a-zA-Z/d]/g, "");
   const navigate = useNavigate();
 
   useEffect(() => {
-      fireConfetti();
-      updateuserList(user_email_id, preGameId, 500, 1);
-  },[]);
+    fireConfetti();
+    console.log("won");
+    updateuserList(
+      user_email_id,
+      preGameId,
+      500,
+      1,
+      "won",
+      player1_score,
+      player2_score
+    );
+  }, [player1_score, player2_score, preGameId, user_email_id]);
 
   return (
     <>

@@ -168,7 +168,7 @@ function Multiplayer() {
     p.rect(PaddleX2, PaddleY2, 20, 80);
 
     ///////////////// set winner
-    if (player1_score === 3) {
+    if (player1_score === 10) {
       updateFirebase(
         "winner",
         {
@@ -276,6 +276,8 @@ function Multiplayer() {
           gameId: gameSessionId,
           player1: player1,
           player2: player2,
+          player1_score: player1_score,
+          player2_score: player2_score
         },
       });
     } else if (isWinner) {
@@ -285,6 +287,8 @@ function Multiplayer() {
           gameId: gameSessionId,
           player1: player1,
           player2: player2,
+          player1_score: player1_score,
+          player2_score: player2_score,
         },
       });
     }

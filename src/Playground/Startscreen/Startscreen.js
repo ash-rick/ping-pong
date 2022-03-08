@@ -9,11 +9,10 @@ import { db } from "Firebase/firebaseconfig.js";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { ref, onValue, update, set } from "firebase/database";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import {setInSession} from 'storage/sessionStorage'
+import { setInSession } from "storage/sessionStorage";
 import Leaderboard from "components/leaderboard/Leaderboard";
 
 function Startscreen() {
- 
   const [data, setData] = useState(null);
   const [ishared, setIshared] = useState(false);
   const [isLoggedin, setIsLoggedin] = useState(false);
@@ -25,8 +24,6 @@ function Startscreen() {
 
   const { gameid } = useParams();
 
-  
-
   useEffect(() => {
     onValue(ref(db, `ping-pong/${uID}`), (snapshot) => {
       setData(snapshot.val());
@@ -34,10 +31,9 @@ function Startscreen() {
       console.log(obj);
     });
     return () => {
-      setData(null)
-    }
+      setData(null);
+    };
   }, [uID]);
-
 
   useEffect(() => {
     if (gameid) {
@@ -57,11 +53,16 @@ function Startscreen() {
   const signInWithGoggle = () => {
     signInWithPopup(auth, provider)
       .then((result) => {
-
         setIsLoggedin(true);
 
-        setInSession("user", JSON.stringify({name: result.user.displayName, email: result.user.email}));
-      
+        setInSession(
+          "user",
+          JSON.stringify({
+            name: result.user.displayName,
+            email: result.user.email,
+          })
+        );
+
         set(ref(db, `ping-pong/${uID}`), {
           players: {
             player1: {
@@ -101,16 +102,12 @@ function Startscreen() {
         });
 
         let newUserID = result.user.email.replace(/[^a-zA-Z/d]/g, "");
-      
-        set(ref(db, `user-list/${newUserID}`), {
+
+        update(ref(db, `user-list/${newUserID}`), {
           name: result.user.displayName,
           email: result.user.email,
           dp: result.user.photoURL,
-          total_games: 0,
-          score: 0,
-          gameIds: [uID]
         });
-       
       })
       .catch((error) => {
         console.log(error);
@@ -141,8 +138,6 @@ function Startscreen() {
 
   return (
     <>
-      <Leaderboard />
-
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={() => closeModal()}
@@ -200,18 +195,24 @@ function Startscreen() {
       <div className="starting-page">
         <div className="login-page">
           <p className="game-name">PING PONG</p>
-          <div className="all-btn">
-            {!ishared && (
+          <div className="mid-content">
+            <Leaderboard />
+            <div className="all-btn">
+              {!ishared && (
+                <Button
+                  className="startscreen-btn"
+                  onClick={() => navigate("/playsolo")}
+                >
+                  singleplayer
+                </Button>
+              )}
               <Button
                 className="startscreen-btn"
-                onClick={() => navigate("/playsolo")}
+                onClick={() => setIsOpen(true)}
               >
-                singleplayer
+                multiplayer
               </Button>
-            )}
-            <Button className="startscreen-btn" onClick={() => setIsOpen(true)}>
-              multiplayer
-            </Button>
+            </div>
           </div>
         </div>
       </div>
