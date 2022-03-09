@@ -1,7 +1,6 @@
 import { Box, Stack } from "@mui/material";
 import { ref, onValue } from "firebase/database";
 import { db } from "Firebase/firebaseconfig.js";
-// import StarRateIcon from "@mui/icons-material/StarRate";
 import { StarRate } from "@material-ui/icons";
 import "./Leaderboard.scss";
 import React, { useEffect, useState } from "react";
@@ -20,11 +19,11 @@ function Leaderboard() {
   const sortByPosition = (obj) => {
     const order = [];
     let res = [];
-    console.log(obj);
+  
     if (Object.keys(obj).length > 0) {
       console.log(obj);
       Object.keys(obj).forEach((key) => {
-        res.push([key, obj[key]["score"]]);
+        res.push([key, obj[key]["totalScore"]]);
       });
       res.sort(function (a, b) {
         return b[1] - a[1];
@@ -33,7 +32,6 @@ function Leaderboard() {
       res.forEach((key) => {
         order.push(obj[key[0]]);
       });
-
       return order;
     }
   };
@@ -61,7 +59,7 @@ function Leaderboard() {
               }}
               className="tb-cell"
             >
-              {lb.score}
+              {lb.totalScore}
             </Box>
             <Box className="tb-cell">
               <StarRate sx={{ color: "#f0bf00" }} />

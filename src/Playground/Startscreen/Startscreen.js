@@ -11,6 +11,8 @@ import { ref, onValue, update, set } from "firebase/database";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { setInSession } from "storage/sessionStorage";
 import Leaderboard from "components/leaderboard/Leaderboard";
+import { toast } from "react-toastify";
+
 
 function Startscreen() {
   const [data, setData] = useState(null);
@@ -157,7 +159,7 @@ function Startscreen() {
               <Button
                 variant="contained"
                 className="enter-game-btn"
-                onClick={() =>
+                onClick={() => 
                   navigate(`/multiplayer/${uID}`, {
                     state: {
                       reset: false,
@@ -167,6 +169,9 @@ function Startscreen() {
                       // player1_email: data.players.player1.email,
                     },
                   })
+                  // : toast.warn('please share link first to enter the game!', {
+                  //   theme:'dark'
+                  // })
                 }
               >
                 Enter Game

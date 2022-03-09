@@ -2,6 +2,8 @@ import { ref, update } from "firebase/database";
 import { db } from "Firebase/firebaseconfig.js";
 import { child, get } from "firebase/database";
 
+
+
 const getExistingPlayerData = async (path) => {
   const snapshot = await get(child(ref(db), `user-list/${path}`));
   return snapshot.val();
@@ -93,7 +95,7 @@ export const updateuserList = (
     update(ref(db, `user-list/${userId}`), {
       total_games: playerData.total_games ? playerData.total_games + 1 : 1,
       gameIds: gameids_data,
-      score: playerData.score ? playerData.score + score : score,
+      totalScore: playerData.score ? playerData.score + score : score,
     });
   });
 };
