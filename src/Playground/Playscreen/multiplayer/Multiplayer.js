@@ -32,6 +32,7 @@ function Multiplayer() {
   const [isWinner, setWinner] = useState({});
   const [speedx, setSpeedX] = useState(0);
   const [speedy, setSpeedY] = useState(0);
+  const [p5Btn, setP5Btn] = useState({});
 
   const [themeType, setThemeType] = useState("light theme");
   const [startNexit, setStartNexit] = useState("start");
@@ -109,11 +110,13 @@ function Multiplayer() {
   const setup = (p) => {
     p.canvas = p.createCanvas(wWidth, wHeight);
 
-    startBtn = p.createButton(startNexit);
-    startBtn.position(wWidth / 2.15, wHeight / 1.11);
-
-    themeBtn = p.createButton(themeType);
-    themeBtn.position(wWidth / 1.22, wHeight / 1.11);
+    setP5Btn({
+      ...p5Btn,
+      startBtn :  p.createButton(startNexit),
+      themeBtn : p.createButton(themeType)
+    });
+    
+    
   
   };
 
@@ -131,15 +134,15 @@ const draw = (p) => {
   p.text("FPS: " + fps.toFixed(2), wWidth / 3.5, wHeight / 19);
 
   /////////craeting buttons and lines
-  if(!startBtn) {
-    startBtn = p.createButton(startNexit);
-    startBtn.position(wWidth / 2.15, wHeight / 1.11);
-  }
+  // if(!startBtn) {
+    // startBtn = p.createButton(startNexit);
+    // startBtn.position(wWidth / 2.15, wHeight / 1.11);
+  // }
   
-  if(!themeBtn) {
-    themeBtn = p.createButton(themeType);
-    themeBtn.position(wWidth / 1.22, wHeight / 1.11);
-  }
+  // if(!themeBtn) {
+    // themeBtn = p.createButton(themeType);
+    // themeBtn.position(wWidth / 1.22, wHeight / 1.11);
+  // }
 
 
 
@@ -283,22 +286,23 @@ const draw = (p) => {
 
   ////////// buttons
   let col = p.color(163, 183, 193);
+  p5Btn.startBtn.position(wWidth / 2.15, wHeight / 1.11);
+  p5Btn.startBtn.style("font-size", "30px");
+  p5Btn.startBtn.style("background-color", col);
+  p5Btn.startBtn.style("border", 0);
+  p5Btn.startBtn.style("padding", "4px 15px");
+  p5Btn.startBtn.mousePressed(start);
 
-  startBtn.style("font-size", "30px");
-  startBtn.style("background-color", col);
-  startBtn.style("border", 0);
-  startBtn.style("padding", "4px 15px");
-  startBtn.mousePressed(start);
-
-  themeBtn.style("font-size", "30px");
-  themeBtn.style("background-color", col);
-  themeBtn.style("border", 0);
-  themeBtn.style("padding", "4px 1%");
-  themeBtn.mousePressed(changeTheme);
+  p5Btn.themeBtn.position(wWidth / 1.22, wHeight / 1.11);
+  p5Btn.themeBtn.style("font-size", "30px");
+  p5Btn.themeBtn.style("background-color", col);
+  p5Btn.themeBtn.style("border", 0);
+  p5Btn.themeBtn.style("padding", "4px 1%");
+  p5Btn.themeBtn.mousePressed(changeTheme);
 
   if (startGame) {
     setStartNexit("exit");
-    startBtn.html("exit");
+    p5Btn.startBtn.html("exit");
   }
 
   /////////////// to winning screen:
@@ -335,7 +339,7 @@ const start = () => {
       updateFirebase("speedy", 0, gameSessionId);
       updateFirebase("start", true, gameSessionId);
       setStartNexit("exit");
-      startBtn.html("exit");
+      p5Btn.startBtn.html("exit");
     } else {
       toast.info("waiting for opponent", {
         position: "bottom-center",
