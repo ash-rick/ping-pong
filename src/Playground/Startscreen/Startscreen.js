@@ -30,7 +30,6 @@ function Startscreen() {
     onValue(ref(db, `ping-pong/${uID}`), (snapshot) => {
       setData(snapshot.val());
       let obj = snapshot.val();
-      console.log(obj);
     });
     return () => {
       setData(null);
@@ -81,14 +80,14 @@ function Startscreen() {
 
           gamestate: {
             ball: {
-              x: wWidth / 2,
-              y: wHeight / 2.15,
+              x:  wWidth / 2,
+              y:  wHeight / 2.15,
             },
             player1_paddle: {
-              y: wHeight / 2.5,
+              y:  wHeight / 2.5,
             },
             player2_paddle: {
-              y: wHeight / 2.5,
+              y:  wHeight / 2.5,
             },
             score: {
               player1_score: 0,
@@ -112,7 +111,11 @@ function Startscreen() {
         });
       })
       .catch((error) => {
-        console.log(error);
+
+        toast.error(error.message, {
+          theme:'dark',
+          position:'top-center'
+        })
       });
   };
   const customStyles = {

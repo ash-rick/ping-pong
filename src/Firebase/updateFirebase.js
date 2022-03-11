@@ -81,6 +81,7 @@ export const updateuserList = (
 
   getExistingPlayerData(userId).then((val) => {
     playerData = val;
+    
     let gameids_data = playerData.gameIds ? playerData.gameIds : {};
    
     gameids_data[gameSessionId] = {

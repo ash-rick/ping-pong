@@ -4,6 +4,7 @@ import { Button } from '@material-ui/core';
 import {fireConfetti} from 'Playground/WinningScreen/confetti'
 import { getFromSession } from 'storage/sessionStorage';
 import { updateuserList } from 'Firebase/updateFirebase'; 
+import { toast } from "react-toastify";
 import './WinningScreen.scss'
 
 
@@ -23,11 +24,11 @@ function WinningScreen() {
 
   useEffect(() => {
     fireConfetti();
-    console.log("won");
+
     updateuserList(
       user_email_id,
       preGameId,
-      500,
+      100,
       1,
       "won",
       player1_score,
@@ -46,14 +47,21 @@ function WinningScreen() {
         <div className="winning-screen-btn">
           <Button
             onClick={() =>
-              navigate(navigateHere, {
-                state: {
-                  reset: true,
-                  uid: preGameId,
-                  player1_name: player1,
-                  player2_name: player2,
-                },
-              })
+              {
+                player1_score !== 10 && player2_score !== 10 ? 
+                toast.info('Opponent left the game please go back!', {
+                  theme: 'dark',
+                  position: 'top-center'
+                }):
+                navigate(navigateHere, {
+                  state: {
+                    reset: true,
+                    uid: preGameId,
+                    player1_name: player1,
+                    player2_name: player2,
+                  },
+                })
+              }
             }
             className="new-game"
           >

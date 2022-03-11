@@ -20,7 +20,7 @@ function LoosingScreen() {
   let navigateHere = preGameId ? `/multiplayer/${preGameId}` : "/playsolo";
 
   useEffect(() => {
-    console.log('lost')
+    
     updateuserList(
       user_email_id,
       preGameId,
