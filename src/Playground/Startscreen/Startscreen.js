@@ -27,9 +27,8 @@ function Startscreen() {
   const { gameid } = useParams();
 
   useEffect(() => {
-    onValue(ref(db, `ping-pong/${uID}`), (snapshot) => {
+    onValue(ref(db, `Game/${uID}`), (snapshot) => {
       setData(snapshot.val());
-      let obj = snapshot.val();
     });
     return () => {
       setData(null);
@@ -64,7 +63,7 @@ function Startscreen() {
           })
         );
 
-        set(ref(db, `ping-pong/${uID}`), {
+        set(ref(db, `Game/${uID}`), {
           players: {
             player1: {
               name: !ishared
@@ -80,14 +79,14 @@ function Startscreen() {
 
           gamestate: {
             ball: {
-              x:  wWidth / 2,
-              y:  wHeight / 2.15,
+              x: wWidth / 2,
+              y: wHeight / 2.15,
             },
             player1_paddle: {
-              y:  wHeight / 2.5,
+              y: wHeight / 2.5,
             },
             player2_paddle: {
-              y:  wHeight / 2.5,
+              y: wHeight / 2.5,
             },
             score: {
               player1_score: 0,
@@ -104,7 +103,7 @@ function Startscreen() {
 
         let newUserID = result.user.email.replace(/[^a-zA-Z/d]/g, "");
 
-        update(ref(db, `user-list/${newUserID}`), {
+        update(ref(db, `UserList/${newUserID}`), {
           name: result.user.displayName,
           email: result.user.email,
           dp: result.user.photoURL,
@@ -155,7 +154,7 @@ function Startscreen() {
               {!ishared && (
                 <CopyToClipboard text={`${gameSessionUrl}${uID}`}>
                   <Button className="copy-link-btn" variant="outlined">
-                    Copy link to share with your firend
+                    Click to Copy link and share with your firend!
                   </Button>
                 </CopyToClipboard>
               )}
@@ -169,12 +168,8 @@ function Startscreen() {
                       uid: uID,
                       player1_name: data.players.player1.name,
                       player2_name: data.players.player2.name,
-                      // player1_email: data.players.player1.email,
                     },
                   })
-                  // : toast.warn('please share link first to enter the game!', {
-                  //   theme:'dark'
-                  // })
                 }
               >
                 Enter Game

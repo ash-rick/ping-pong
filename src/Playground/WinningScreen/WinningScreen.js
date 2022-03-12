@@ -28,7 +28,7 @@ function WinningScreen() {
     updateuserList(
       user_email_id,
       preGameId,
-      100,
+      50,
       1,
       "won",
       player1_score,

@@ -50,7 +50,7 @@ function Multiplayer() {
   let dir = [1, -1];
 
   useEffect(() => {
-    onValue(ref(db, `ping-pong/${gameSessionId}`), (snapshot) => {
+    onValue(ref(db, `Game/${gameSessionId}`), (snapshot) => {
       const data = snapshot.val();
       setPlayer1_Email(data.players.player1.email);
       setPlayer2_Email(data.players.player2.email);
@@ -205,7 +205,7 @@ function Multiplayer() {
     }
 
     if (ballY > wHeight / 1.25) {
-      updateFirebase("ballY", (ballY - 15) , gameSessionId);
+      updateFirebase("ballY", (ballY - 15), gameSessionId);
       updateFirebase("speedy", speedy * -1, gameSessionId);
     }
     if (ballY < wHeight / 7) {
@@ -216,9 +216,9 @@ function Multiplayer() {
     /////////// Controller:
     if (user.email === player1_email) {
       if (PaddleY - 15 >= wHeight / 7.1 && p.keyIsDown(p.UP_ARROW)) {
-        updateFirebase("PaddleY", (PaddleY - 15) , gameSessionId);
+        updateFirebase("PaddleY", (PaddleY - 15), gameSessionId);
       } else if (PaddleY + 15 <= wHeight / 1.47 && p.keyIsDown(p.DOWN_ARROW)) {
-        updateFirebase("PaddleY", (PaddleY + 15) , gameSessionId);
+        updateFirebase("PaddleY", (PaddleY + 15), gameSessionId);
       }
     } else {
       if (PaddleY2 - 15 >= wHeight / 7.1 && p.keyIsDown(p.UP_ARROW)) {
@@ -232,12 +232,30 @@ function Multiplayer() {
     let hitright;
     let hitleft;
 
-    hitright = ballHit(p, ballX, ballY, 10, PaddleX2, PaddleY2, 25, 85);
-    hitleft = ballHit(p, ballX, ballY, 10, PaddleX, PaddleY, 25, 85);
+    hitright = ballHit(
+      p, 
+      ballX, 
+      ballY, 
+      10, 
+      PaddleX2, 
+      PaddleY2, 
+      25, 
+      85);
+   
+    hitleft = ballHit(
+      p,
+      ballX,
+      ballY,
+      10,
+      PaddleX,
+      PaddleY,
+      25,
+      85
+    );
 
     if (hitleft || hitright) {
       if (hitleft) updateFirebase("ballX", (ballX + 20), gameSessionId);
-      else updateFirebase("ballX", (ballX - 20) , gameSessionId);
+      else updateFirebase("ballX", (ballX - 20), gameSessionId);
 
       updateFirebase("speedx", (speedx + 1) * -1, gameSessionId);
       updateFirebase(
@@ -283,7 +301,7 @@ function Multiplayer() {
         setStartNexit("exit");
         p5Btn.startBtn.html("exit");
       } else {
-        toast.info("waiting for opponent", {
+        toast.info("...waiting for opponent ", {
           position: "bottom-center",
           theme: "dark",
         });
