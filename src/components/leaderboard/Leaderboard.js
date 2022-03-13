@@ -25,7 +25,6 @@ function Leaderboard() {
       Object.keys(obj).forEach((key) => {
         let gameIs;
         Object.values([(key, obj[key]["gameID"])]).map(u => Object.values(u).map(o => o.map(k => gameIs = (k.game))));
-        
         if(gameIs === 'ping-pong')
           res.push([key, obj[key]["totalScore"]]);
       });
