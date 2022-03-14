@@ -7,6 +7,9 @@ import React, { useEffect, useState } from "react";
 
 function Leaderboard() {
   const [leaderBoard, setLeaderBoard] = useState([]);
+  
+
+  let gameLevelScore = 0;
 
   useEffect(() => {
     onValue(ref(db, `UserList`), (snapshot) => {
@@ -22,19 +25,37 @@ function Leaderboard() {
 
     if (Object.keys(obj).length > 0) {
       console.log(obj);
+      let wins = 1;
       Object.keys(obj).forEach((key) => {
+
+        let loc = window.location.hostname;
+        loc = loc.slice(0, loc.indexOf('.'));
+        loc = loc.slice(0, loc.lastIndexOf('-'));
         let gameIs;
-        Object.values([(key, obj[key]["gameID"])]).map(u => Object.values(u).map(o => o.map(k => gameIs = (k.game))));
-        if(gameIs === 'ping-pong')
-          res.push([key, obj[key]["totalScore"]]);
+        let status;
+
+        Object.values([(key, obj[key]["gameID"])]).map(u => Object.values(u).map(o => o.map((k) => {  
+          gameIs = k.game
+          status = k.status
+        })));
+       
+        if(gameIs === loc){
+            gameLevelScore += status === 'won' ? 10 : 0;
+          res.push([key, gameLevelScore]);
+        }
+        else {
+          res.push(Object.values([(key, obj[key]["totalScore"])]))
+        }
       });
       res.sort(function (a, b) {
         return b[1] - a[1];
       });
       console.log(res);
       res.forEach((key) => {
+        console.log(key);
         order.push(obj[key[0]]);
       });
+      console.log('order', order);
       return order;
     }
   };
@@ -63,7 +84,10 @@ function Leaderboard() {
                 }}
                 className="tb-cell"
               >
-                {lb.totalScore}
+                {gameLevelScore}
+              </Box>
+              <Box className="tb-cell">
+                <StarRate sx={{ color: "#f0bf00" }} />
               </Box>
               <Box className="tb-cell">
                 <StarRate sx={{ color: "#f0bf00" }} />

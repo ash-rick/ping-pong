@@ -3,8 +3,7 @@ import { ballHit } from "util/ballHitPaddle";
 import { aiMove } from "util/comMove";
 import { useNavigate} from "react-router-dom";
 import Sketch from "react-p5";
-import Timer from "components/timer/Timer";
-
+import './Singleplayer.scss'
 
 
 function Singleplayer(props) {
@@ -18,8 +17,6 @@ function Singleplayer(props) {
   let player1_score;
   let player2_score;
  
-
-
   var PaddleX, PaddleX2;
   var speedx, speedy;
   let setSpeed;
@@ -212,32 +209,20 @@ function Singleplayer(props) {
     }
 
     let col = p.color(163, 183, 193);
-
-    resetBtn.style("font-size", "30px");
-    resetBtn.style("background-color", col);
-    resetBtn.style("border", 0);
-    resetBtn.style("padding", "4px 10px");
+    resetBtn.addClass("singleplay-btn");
     resetBtn.mousePressed(reset);
 
-    themeBtn.style("font-size", "30px");
-    themeBtn.style("background-color", col);
-    themeBtn.style("border", 0);
-    themeBtn.style("padding", "4px 1%");
+    themeBtn.addClass("singleplay-btn");
     themeBtn.mousePressed(changeTheme);
 
-    pauseBtn.style("font-size", "30px");
-    pauseBtn.style("background-color", col);
-    pauseBtn.style("border", 0);
-    pauseBtn.style("padding", "4px 10px");
+    pauseBtn.addClass('singleplay-btn');
     pauseBtn.mousePressed(pause);
 
     sel.option("easy", "easy");
     sel.option("medium", "medium");
     sel.option("hard", "hard");
-    sel.style("padding", "7px");
-    sel.style("font-size", "20px");
-    sel.style("font-weight", "600");
-    sel.style("background-color", "RGB(163, 183, 193)");
+    sel.addClass('select-btn');
+   
     sel.changed(changeDeficulty);
    
     // for ai move

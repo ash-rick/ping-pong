@@ -101,7 +101,7 @@ function Startscreen() {
           winner: {},
         });
 
-        let newUserID = result.user.email.replace(/[^a-zA-Z/d]/g, "");
+        let newUserID = result.user.email.replace(/[^a-zA-Z/\d]/g, "");
 
         update(ref(db, `UserList/${newUserID}`), {
           name: result.user.displayName,

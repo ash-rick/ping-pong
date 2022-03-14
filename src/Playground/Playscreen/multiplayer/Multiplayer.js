@@ -8,6 +8,7 @@ import { getFromSession } from "storage/sessionStorage";
 import Timer from "components/timer/Timer";
 import { toast } from "react-toastify";
 import { updateFirebase } from "Firebase/updateFirebase.js";
+import './Multiplayer.scss';
 
 function Multiplayer() {
   let wWidth = window.innerWidth;
@@ -267,18 +268,12 @@ function Multiplayer() {
 
     ////////// buttons styles
     let col = p.color(163, 183, 193);
-    p5Btn.startBtn.position(wWidth / 2.15, wHeight / 1.11);
-    p5Btn.startBtn.style("font-size", "30px");
-    p5Btn.startBtn.style("background-color", col);
-    p5Btn.startBtn.style("border", 0);
-    p5Btn.startBtn.style("padding", "4px 15px");
+    p5Btn.startBtn.position(wWidth / 2.15, wHeight / 1.12);
+    p5Btn.startBtn.addClass("multimode-btn");
     p5Btn.startBtn.mousePressed(start);
 
-    p5Btn.themeBtn.position(wWidth / 1.22, wHeight / 1.11);
-    p5Btn.themeBtn.style("font-size", "30px");
-    p5Btn.themeBtn.style("background-color", col);
-    p5Btn.themeBtn.style("border", 0);
-    p5Btn.themeBtn.style("padding", "4px 1%");
+    p5Btn.themeBtn.position(wWidth / 1.22, wHeight / 1.12);
+    p5Btn.themeBtn.addClass("multimode-btn");
     p5Btn.themeBtn.mousePressed(changeTheme);
 
     if (startGame) {
