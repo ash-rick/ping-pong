@@ -1,9 +1,10 @@
-import React, { useState} from "react";
+import React from "react";
 import { ballHit } from "util/ballHitPaddle";
 import { aiMove } from "util/comMove";
 import { useNavigate} from "react-router-dom";
 import Sketch from "react-p5";
-import './Singleplayer.scss'
+import './Singleplayer.scss';
+
 
 
 function Singleplayer(props) {
@@ -105,23 +106,23 @@ function Singleplayer(props) {
     p.text("Ping Pong", wWidth / 2.46, wHeight / 12);
 
     p.textSize(20);
-    p.fill(255, 255, 180);
+    p.fill(170, 240, 209);
     p.text("YOU", wWidth / 12, wHeight / 19);
 
     p.textSize(20);
-    p.fill(255, 255, 180);
+    p.fill(170, 240, 209);
     p.text("Computer", wWidth / 1.3, wHeight / 19);
 
     p.textSize(20);
-    p.fill(255, 255, 180);
-    p.text(`score:${player1_score}`, wWidth / 6, wHeight / 19);
+    p.fill(170, 240, 209);
+    p.text(`score: ${player1_score}`, wWidth / 6, wHeight / 19);
 
     p.textSize(20);
-    p.fill(255, 255, 180);
-    p.text(`score:${player2_score}`, wWidth / 1.15, wHeight / 19);
+    p.fill(170, 240, 209);
+    p.text(`score: ${player2_score}`, wWidth / 1.15, wHeight / 19);
 
     p.textSize(25);
-    p.fill(255, 255, 180);
+    p.fill(170, 240, 209);
     p.text("Difficulty", wWidth / 18, wHeight / 1.06);
 
     ////////////////////winning screen
@@ -140,7 +141,7 @@ function Singleplayer(props) {
         });
       }
     }
-    ///////////////////winning screen
+   
 
     //////////////boundary checks
     if (ballX >= wWidth / 1.05) {
@@ -174,10 +175,15 @@ function Singleplayer(props) {
 
     ///////////Controller
 
-    if (PaddleY - 5 >= wHeight / 6.9 && p.keyIsDown(p.UP_ARROW)) {
+    if (
+      PaddleY - 5 >= wHeight / 6.9 &&
+      p.keyIsDown(p.UP_ARROW) 
+    ) {
       PaddleY = PaddleY - 15;
     } else if (PaddleY + 5 <= wHeight / 1.47 && p.keyIsDown(p.DOWN_ARROW)) {
       PaddleY = PaddleY + 15;
+    }else {
+      PaddleY = Math.min(wHeight/1.5, Math.max(wHeight/7.5, p.mouseY));
     }
 
     /////////////// paddles and ball
@@ -237,6 +243,7 @@ function Singleplayer(props) {
         dir
       )
     }
+    
   };
 
   const pause = () => {
@@ -324,6 +331,7 @@ function Singleplayer(props) {
     }
   };
 
+  
   const exitFromGameSession = () => {
     navigate("/");
   };

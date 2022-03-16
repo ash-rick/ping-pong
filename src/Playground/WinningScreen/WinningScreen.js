@@ -19,7 +19,7 @@ function WinningScreen() {
   let player2_score = state.player2_score;
   let navigateHere = preGameId ? `/multiplayer/${preGameId}` : '/playsolo';
   let user = JSON.parse(getFromSession("user"));
-  let user_email_id = user.email.replace(/[^a-zA-Z/d]/g, "");
+  let user_email_id = preGameId && user.email.replace(/[^a-zA-Z/d]/g, "");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -48,7 +48,8 @@ function WinningScreen() {
           <Button
             onClick={() =>
               {
-                player1_score !== 10 && player2_score !== 10 ? 
+                
+                player1_score !== 10 && player2_score !== 10 && preGameId? 
                 toast.info('Opponent left the game please go back!', {
                   theme: 'dark',
                   position: 'top-center'

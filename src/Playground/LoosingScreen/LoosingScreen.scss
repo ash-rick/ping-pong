@@ -5,7 +5,7 @@
 }
 .winning-background {
     background-color: black;
-    height: 600px;
+    height: 100vh;
     width : 100%;
     .winner-name-div {
         display: flex;
@@ -20,7 +20,6 @@
         display: flex;
         justify-content: space-around;
         padding-top: 20%;
-        // margin-top: 40%;
         
         .new-game {
             padding: 10px 15px;

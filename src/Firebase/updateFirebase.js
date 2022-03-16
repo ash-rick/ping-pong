@@ -2,8 +2,8 @@ import { ref, update } from "firebase/database";
 import { db } from "Firebase/firebaseconfig.js";
 import { child, get } from "firebase/database";
 
-const getExistingPlayerData = async (path) => {
-  const snapshot = await get(child(ref(db), `UserList/${path}`));
+export const getExistingPlayerData = async (endpoint, path) => {
+  const snapshot = await get(child(ref(db), `${endpoint}/${path}`));
   return snapshot.val();
 };
 
@@ -75,23 +75,24 @@ export const updateuserList = (
 ) => {
   let playerData;
 
-  getExistingPlayerData(userId).then((val) => {
+  getExistingPlayerData('UserList', userId).then((val) => {
     playerData = val;
     console.log(playerData);
     console.log(playerData);
+
     let gameids_data = playerData.gameID ? playerData.gameID : {};
-    if(gameSessionId in gameids_data) {
+
+    if (gameSessionId in gameids_data) {
       let gi = gameids_data[gameSessionId];
       gi.push({
-      score: [
-        Math.max(player1_score, player2_score),
-        Math.min(player1_score, player2_score),
-      ],
-      status: status,
-    });
-    gameids_data[gameSessionId] = gi;
-    }
-    else {
+        score: [
+          Math.max(player1_score, player2_score),
+          Math.min(player1_score, player2_score),
+        ],
+        status: status,
+      });
+      gameids_data[gameSessionId] = gi;
+    } else {
       gameids_data[gameSessionId] = [
         {
           score: [
@@ -99,11 +100,11 @@ export const updateuserList = (
             Math.min(player1_score, player2_score),
           ],
           status: status,
-          game: 'ping-pong'
+          game: "ping-pong",
         },
       ];
     }
- 
+
     update(ref(db, `UserList/${userId}`), {
       total_games: playerData.total_games ? playerData.total_games + 1 : 1,
       gameID: gameids_data,

@@ -15,12 +15,13 @@ function LoosingScreen() {
   let player1_score = state.player1_score;
   let player2_score = state.player2_score;
   let user = JSON.parse(getFromSession("user"));
-  let user_email_id = user.email.replace(/[^a-zA-Z/d]/g, "");
+
+  let user_email_id = preGameId && user.email.replace(/[^a-zA-Z/\d]/g, "");
 
   let navigateHere = preGameId ? `/multiplayer/${preGameId}` : "/playsolo";
 
   useEffect(() => {
-    
+    console.log('inlostpage');    
     updateuserList(
       user_email_id,
       preGameId,

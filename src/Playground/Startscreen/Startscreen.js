@@ -10,7 +10,7 @@ import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { ref, onValue, update, set } from "firebase/database";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { setInSession } from "storage/sessionStorage";
-import Leaderboard from "components/leaderboard/Leaderboard";
+import LeaderBoard from "components/leaderboard/LeaderBoard";
 import { toast } from "react-toastify";
 
 
@@ -199,7 +199,7 @@ function Startscreen() {
         <div className="login-page">
           <p className="game-name">PING PONG</p>
           <div className="mid-content">
-            <Leaderboard />
+            <LeaderBoard />
             <div className="all-btn">
               {!ishared && (
                 <Button

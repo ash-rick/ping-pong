@@ -13,8 +13,7 @@ import './Multiplayer.scss';
 function Multiplayer() {
   let wWidth = window.innerWidth;
   let wHeight = window.innerHeight;
-  console.log('w', wWidth);
-  console.log('h', wHeight);
+ 
   const user = JSON.parse(getFromSession("user"));
 
   const { state } = useLocation();
@@ -267,7 +266,7 @@ function Multiplayer() {
     }
 
     ////////// buttons styles
-    let col = p.color(163, 183, 193);
+    // let col = p.color(163, 183, 193);
     p5Btn.startBtn.position(wWidth / 2.15, wHeight / 1.12);
     p5Btn.startBtn.addClass("multimode-btn");
     p5Btn.startBtn.mousePressed(start);
