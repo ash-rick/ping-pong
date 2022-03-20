@@ -25,7 +25,7 @@ function WinningScreen() {
   useEffect(() => {
     fireConfetti();
 
-    updateuserList(
+    preGameId && updateuserList(
       user_email_id,
       preGameId,
       50,

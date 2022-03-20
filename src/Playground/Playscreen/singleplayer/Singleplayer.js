@@ -7,7 +7,7 @@ import './Singleplayer.scss';
 
 
 
-function Singleplayer(props) {
+function Singleplayer() {
   let wWidth = window.innerWidth;
   let wHeight = window.innerHeight;
 
@@ -31,11 +31,10 @@ function Singleplayer(props) {
   let startNreset;
   let pauseNresume;
   let winPlayer;
-  // let winPlayerName;
   let themeType;
 
-  let level_min;
-  let level_max;
+  let miss ;
+  
   let followBall;
   let sel;
   let deficulty;
@@ -44,7 +43,7 @@ function Singleplayer(props) {
   const setup = (p) => {
     p.canvas = p.createCanvas(wWidth, wHeight);
 
-    ballX = wWidth / 2.05;
+    ballX = wWidth / 2;
     ballY = wHeight / 2.15;
     PaddleY = wHeight / 2.5;
     PaddleY2 = wHeight / 2.5;
@@ -53,11 +52,12 @@ function Singleplayer(props) {
     speedx = 0;
     speedy = 0;
     PaddleX = wWidth / 20;
-    PaddleX2 = wWidth / 1.067;
+    PaddleX2 = wWidth / 1.0675;
     dir = [1, -1];
 
-    level_min = 40;
-    level_max = 100;
+
+    miss = 120;
+  
     followBall = 50;
     deficulty = "easy";
 
@@ -84,7 +84,7 @@ function Singleplayer(props) {
     p.background("RGB(23, 76, 113)");
 
     p.strokeWeight(4);
-    p.line((wWidth - 35) / 2, wHeight / 7.5, (wWidth - 35) / 2, wHeight / 1.21); // middle line
+    p.line(wWidth / 2, wHeight / 7.5, wWidth / 2, wHeight / 1.21); // middle line
     p.line(wWidth / 20, wHeight / 7.5, wWidth / 20, wHeight / 1.21); // left line
     p.line(wWidth / 1.05, wHeight / 7.5, wWidth / 1.05, wHeight / 1.21); //right line
     p.line(wWidth / 20, wHeight / 7.5, wWidth / 1.05, wHeight / 7.5); //upper line
@@ -99,54 +99,55 @@ function Singleplayer(props) {
 
     let midc = p.color("RGB(23, 76, 113)");
     p.fill(midc);
-    p.circle(wWidth / 2.05, wHeight / 2.15, wWidth / 10);
+    p.circle(wWidth / 2, wHeight / 2.15, wWidth / 10);
 
-    p.textSize(47);
+    p.textSize(wWidth/25);
     p.fill(255, 255, 255);
     p.text("Ping Pong", wWidth / 2.46, wHeight / 12);
 
-    p.textSize(20);
+    p.textSize(wWidth / 45);
     p.fill(170, 240, 209);
     p.text("YOU", wWidth / 12, wHeight / 19);
 
-    p.textSize(20);
+    p.textSize(wWidth / 45);
     p.fill(170, 240, 209);
-    p.text("Computer", wWidth / 1.3, wHeight / 19);
+    p.text("Computer", wWidth / 1.4, wHeight / 19);
 
-    p.textSize(20);
+    p.textSize(wWidth / 45);
     p.fill(170, 240, 209);
     p.text(`score: ${player1_score}`, wWidth / 6, wHeight / 19);
 
-    p.textSize(20);
+    p.textSize(wWidth / 45);
     p.fill(170, 240, 209);
     p.text(`score: ${player2_score}`, wWidth / 1.15, wHeight / 19);
 
-    p.textSize(25);
+    p.textSize(wWidth / 45);
     p.fill(170, 240, 209);
-    p.text("Difficulty", wWidth / 18, wHeight / 1.06);
+    p.text("Difficulty", wWidth/ 18, wHeight / 1.06);
 
     ////////////////////winning screen
     if (winPlayer) {
       if (winPlayer === "you") {
         navigate("/win", {
-          state: {
-            // winPlayer: shoWinPlayer,
-          },
+          state: {},
         });
       } else {
         navigate("/youlose", {
-          state: {
-            //  looser: shoWinPlayer,
-          },
+          state: {},
         });
       }
     }
-   
+
+    ////////////////////ball position update
+
+    ballX = ballX + speedx;
+    ballY = ballY + speedy;
 
     //////////////boundary checks
-    if (ballX >= wWidth / 1.05) {
+    if (ballX >= wWidth) {
       speedy = 0;
-      ballX = wWidth / 2.05;
+      speedx *= -1;
+      ballX = wWidth / 1.15;
       ballY = wHeight / 2.15;
       player1_score += 1;
 
@@ -156,7 +157,8 @@ function Singleplayer(props) {
     }
     if (ballX <= wWidth / 20) {
       speedy = 0;
-      ballX = wWidth / 2.05;
+      speedx *= -1;
+      ballX = wWidth / 10;
       ballY = wHeight / 2.15;
       player2_score += 1;
 
@@ -175,15 +177,10 @@ function Singleplayer(props) {
 
     ///////////Controller
 
-    if (
-      PaddleY - 5 >= wHeight / 6.9 &&
-      p.keyIsDown(p.UP_ARROW) 
-    ) {
+    if (PaddleY - 5 >= wHeight / 6.9 && p.keyIsDown(p.UP_ARROW)) {
       PaddleY = PaddleY - 15;
     } else if (PaddleY + 5 <= wHeight / 1.47 && p.keyIsDown(p.DOWN_ARROW)) {
       PaddleY = PaddleY + 15;
-    }else {
-      PaddleY = Math.min(wHeight/1.5, Math.max(wHeight/7.5, p.mouseY));
     }
 
     /////////////// paddles and ball
@@ -200,50 +197,41 @@ function Singleplayer(props) {
     p.fill(c);
     p.rect(PaddleX2, PaddleY2, 20, 80);
 
-    ////////////////////ball position update
-
-    ballX = ballX + speedx;
-    ballY = ballY + speedy;
-
     //////////////////////////-ball hit case
-    let hitRight = ballHit(p, ballX, ballY, 10, PaddleX2, PaddleY2, 24, 84);
-    let hitLeft = ballHit(p, ballX, ballY, 10, PaddleX, PaddleY, 24, 84);
+    let hitRight = ballHit(p, ballX, ballY, 10, PaddleX2, PaddleY2, 30, 90);
+    let hitLeft = ballHit(p, ballX, ballY, 10, PaddleX, PaddleY, 20, 80);
 
     if (hitRight || hitLeft) {
       speedx *= -1;
       speedy = dir[Math.round(Math.random())] * Math.random() * 10;
     }
 
-    let col = p.color(163, 183, 193);
+   
     resetBtn.addClass("singleplay-btn");
     resetBtn.mousePressed(reset);
 
     themeBtn.addClass("singleplay-btn");
     themeBtn.mousePressed(changeTheme);
 
-    pauseBtn.addClass('singleplay-btn');
+    pauseBtn.addClass("singleplay-btn");
     pauseBtn.mousePressed(pause);
 
     sel.option("easy", "easy");
     sel.option("medium", "medium");
     sel.option("hard", "hard");
-    sel.addClass('select-btn');
-   
+    sel.addClass("singleplay-btn");
+
     sel.changed(changeDeficulty);
-   
+
     // for ai move
     if (ballX > wWidth - (100 + Math.floor(Math.random() * followBall))) {
-      
       PaddleY2 = aiMove(
         wHeight / 1.5,
-        wHeight / 7.7,
+        wHeight / 7.5,
         ballY,
-        level_max,
-        level_min,
-        dir
-      )
+        Math.random() * miss
+      );
     }
-    
   };
 
   const pause = () => {
@@ -274,8 +262,8 @@ function Singleplayer(props) {
         PaddleY = wHeight / 2.5;
         PaddleX2 = wWidth / 1.067;
         PaddleY2 = wHeight / 2.5;
-        ballX = ((wWidth - 35) / 2);
-        ballY = ((wHeight - 40) / 2);
+        ballX = wWidth / 2;
+        ballY = wHeight / 2.15;
         speedx = 0;
         speedy = 0;
 
@@ -306,24 +294,26 @@ function Singleplayer(props) {
   };
 
   const changeDeficulty = () => {
+
     deficulty = sel.selected();
+    
 
     switch (deficulty) {
       case "easy":
-        level_min = 30;
-        level_max = 60;
+        
+        miss = 130;
         followBall = 70;
         setSpeed = 8;
         break;
       case "medium":
-        level_min = 30;
-        level_max = 50;
+        
+        miss = 100; 
         followBall = 120;
         setSpeed = 15;
         break;
       case "hard":
-        level_min = 20;
-        level_max = 40;
+    
+        miss = 90
         followBall = 180;
         setSpeed = 22;
         break;

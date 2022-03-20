@@ -145,9 +145,7 @@ function LeaderBoard() {
                   </div>
                 </div>
               </div>
-              {/* <div className={hidden ? "hide" : "show"}> */}
-
-              {/* </div> */}
+            
             </Stack>
           ))}
         </Stack>

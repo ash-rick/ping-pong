@@ -106,26 +106,22 @@ export default function Login() {
     const signInWithFaceBook = () => {
       signInWithPopup(auth, FBprovider)
         .then((result) => {
-          // The signed-in user info.
+
           const user = result.user;
           console.log(user);
-          // This gives you a Facebook Access Token. You can use it to access the Facebook API.
           const credential = FacebookAuthProvider.credentialFromResult(result);
           const accessToken = credential.accessToken;
 
-          // ...
         })
         .catch((error) => {
-          // Handle Errors here.
+       
           const errorCode = error.code;
           const errorMessage = error.message;
           console.log(errorMessage);
-          // The email of the user's account used.
+        
           const email = error.email;
-          // The AuthCredential type that was used.
           const credential = FacebookAuthProvider.credentialFromError(error);
 
-          // ...
       });
     }
 
@@ -148,7 +144,6 @@ export default function Login() {
                 <TextField
                   id="standard-basic"
                   className="input-text"
-                  // label="Email"
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -157,7 +152,6 @@ export default function Login() {
                 <TextField
                   id="standard-basic"
                   className="input-text"
-                  // label="Password"
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -190,7 +184,7 @@ export default function Login() {
                   <FacebookIcon className="provider-icons" />
                   Continue with Facebook
                 </Button>
-                {/* <Button variant="outlined">Continue with Tweeter</Button> */}
+                
               </Stack>
             </Box>
           </Stack>

@@ -22,15 +22,16 @@ function LoosingScreen() {
 
   useEffect(() => {
     console.log('inlostpage');    
-    updateuserList(
-      user_email_id,
-      preGameId,
-      0,
-      1,
-      'lost',
-      player1_score,
-      player2_score
-    );
+    preGameId &&
+      updateuserList(
+        user_email_id,
+        preGameId,
+        0,
+        1,
+        "lost",
+        player1_score,
+        player2_score
+      );
   })
 
   const navigate = useNavigate();

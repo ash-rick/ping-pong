@@ -1,13 +1,12 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { ballHit } from "util/ballHitPaddle";
-import { ref, onValue, update } from "firebase/database";
-import { useNavigate, useLocation } from "react-router-dom";
-import Sketch from "react-p5";
+import { onValue, ref } from "firebase/database";
 import { db } from "Firebase/firebaseconfig.js";
-import { getFromSession } from "storage/sessionStorage";
-import Timer from "components/timer/Timer";
-import { toast } from "react-toastify";
 import { updateFirebase } from "Firebase/updateFirebase.js";
+import React, { useEffect, useState } from "react";
+import Sketch from "react-p5";
+import { useLocation, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { getFromSession } from "storage/sessionStorage";
+import { ballHit } from "util/ballHitPaddle";
 import './Multiplayer.scss';
 
 function Multiplayer() {
@@ -98,17 +97,16 @@ function Multiplayer() {
   };
 
   const draw = (p) => {
-    // p.frameRate(30); //deafult : 60
 
     p.background("RGB(23, 76, 113)");
 
     PaddleX = wWidth / 20;
     PaddleX2 = wWidth / 1.07;
 
-    ///////// fps showing
-    let fps = p.frameRate();
-    p.fill(255);
-    p.text("FPS: " + fps.toFixed(2), wWidth / 3.5, wHeight / 19);
+    ///////// fps display for debugging fps issue
+    // let fps = p.frameRate();
+    // p.fill(255);
+    // p.text("FPS: " + fps.toFixed(2), wWidth / 3.5, wHeight / 19);
 
     ////////// borders
     p.strokeWeight(4);
