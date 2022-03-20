@@ -155,7 +155,7 @@ function Singleplayer() {
         winPlayer = "you";
       }
     }
-    if (ballX <= wWidth / 20) {
+    if (ballX <= 0) {
       speedy = 0;
       speedx *= -1;
       ballX = wWidth / 10;
@@ -191,15 +191,33 @@ function Singleplayer() {
 
     c = p.color(65);
     p.fill(c);
-    p.rect(PaddleX, PaddleY, 20, 80);
+    p.rect(PaddleX, PaddleY, wWidth / 67, wHeight / 7.5);
 
     c = p.color(65);
     p.fill(c);
-    p.rect(PaddleX2, PaddleY2, 20, 80);
+    p.rect(PaddleX2, PaddleY2, wWidth / 67, wHeight / 7.5);
 
     //////////////////////////-ball hit case
-    let hitRight = ballHit(p, ballX, ballY, 10, PaddleX2, PaddleY2, 30, 90);
-    let hitLeft = ballHit(p, ballX, ballY, 10, PaddleX, PaddleY, 20, 80);
+    let hitRight = ballHit(
+      p,
+      ballX,
+      ballY,
+      10,
+      PaddleX2,
+      PaddleY2,
+      wWidth / 67,
+      wHeight / 7.5
+    );
+    let hitLeft = ballHit(
+      p,
+      ballX,
+      ballY,
+      10,
+      PaddleX,
+      PaddleY,
+      wWidth / 67,
+      wHeight / 7.5
+    );
 
     if (hitRight || hitLeft) {
       speedx *= -1;
@@ -328,7 +346,6 @@ function Singleplayer() {
 
   return (
     <div className="playing-page">
-      {/* <Timer /> */}
       <Sketch setup={setup} draw={draw}></Sketch>
     </div>
   );
