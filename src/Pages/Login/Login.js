@@ -19,7 +19,7 @@ import FacebookIcon from "@mui/icons-material/Facebook";
 import GoogleIcon from "@mui/icons-material/Google";
 import { auth } from "Firebase/firebaseconfig";
 import { toast } from "react-toastify";
-import { setInSession } from "storage/sessionStorage";
+import { setInSession } from "util/storage/sessionStorage";
 import "./Login.scss";
 
 export default function Login() {

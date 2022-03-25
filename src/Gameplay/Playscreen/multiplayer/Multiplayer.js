@@ -1,18 +1,18 @@
+import React, { useEffect, useState } from "react";
+import Sketch from "react-p5";
 import { onValue, ref } from "firebase/database";
 import { db } from "Firebase/firebaseconfig.js";
 import { updateFirebase } from "Firebase/updateFirebase.js";
-import React, { useEffect, useState } from "react";
-import Sketch from "react-p5";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { getFromSession } from "storage/sessionStorage";
+import { getFromSession } from "util/storage/sessionStorage";
 import { ballHit } from "util/ballHitPaddle";
-import './Multiplayer.scss';
+import "./Multiplayer.scss";
 
 function Multiplayer() {
   let wWidth = window.innerWidth;
   let wHeight = window.innerHeight;
- 
+
   const user = JSON.parse(getFromSession("user"));
 
   const { state } = useLocation();
@@ -38,11 +38,8 @@ function Multiplayer() {
 
   const navigate = useNavigate();
 
-  // let isMultiplayer = state.isMultiplayer;
   let resetGame = state.reset;
   let gameSessionId = state.uid;
-  let player1 = state.player1_name;
-  let player2 = state.player2_name;
 
   let PaddleX;
   let PaddleX2;
@@ -71,16 +68,16 @@ function Multiplayer() {
   //////////////game reset
   useEffect(() => {
     if (resetGame && resetBtn) {
-      updateFirebase("ballX", wWidth / 2, gameSessionId);
-      updateFirebase("ballY", wHeight / 2.15, gameSessionId);
-      updateFirebase("player1_score", 0, gameSessionId);
-      updateFirebase("player2_score", 0, gameSessionId);
-      updateFirebase("speedx", 0, gameSessionId);
-      updateFirebase("speedy", 0, gameSessionId);
-      updateFirebase("winner", null, gameSessionId);
-      updateFirebase("start", false, gameSessionId);
-      updateFirebase("PaddleY",  wHeight / 2.5, gameSessionId);
-      updateFirebase("PaddleY2", wHeight / 2.5, gameSessionId);
+      updateFirebase('Game',"ballX", wWidth / 2, gameSessionId);
+      updateFirebase('Game',"ballY", wHeight / 2.15, gameSessionId);
+      updateFirebase('Game',"player1_score", 0, gameSessionId);
+      updateFirebase('Game',"player2_score", 0, gameSessionId);
+      updateFirebase('Game',"speedx", 0, gameSessionId);
+      updateFirebase('Game',"speedy", 0, gameSessionId);
+      updateFirebase('Game',"winner", null, gameSessionId);
+      updateFirebase('Game',"start", false, gameSessionId);
+      updateFirebase('Game',"PaddleY", wHeight / 2.5, gameSessionId);
+      updateFirebase('Game',"PaddleY2", wHeight / 2.5, gameSessionId);
 
       return () => setResetBtn(false);
     }
@@ -97,11 +94,10 @@ function Multiplayer() {
   };
 
   const draw = (p) => {
-
     p.background("RGB(23, 76, 113)");
 
     PaddleX = wWidth / 20;
-    PaddleX2 = wWidth / 1.07;
+    PaddleX2 = wWidth / 1.067;
 
     ///////// fps display for debugging fps issue
     // let fps = p.frameRate();
@@ -118,8 +114,8 @@ function Multiplayer() {
     p.strokeWeight(2);
 
     //////// updating ball position
-    updateFirebase("ballX", (ballX + speedx) , gameSessionId);
-    updateFirebase("ballY", (ballY + speedy) , gameSessionId);
+    updateFirebase('Game',"ballX", ballX + speedx, gameSessionId);
+    updateFirebase('Game',"ballY", ballY + speedy, gameSessionId);
 
     /////// themes
     if (themeType === "dark") {
@@ -133,23 +129,23 @@ function Multiplayer() {
     p.fill(midc);
     p.circle(wWidth / 2, wHeight / 2.15, wWidth / 10);
 
-    p.textSize(47);
+    p.textSize(wWidth / 25);
     p.fill(255, 255, 255);
     p.text("Ping Pong", wWidth / 2.4, wHeight / 12);
 
-    p.textSize(20);
+    p.textSize(wWidth / 45);
     p.fill(255, 255, 180);
     p.text(player1_name, wWidth / 15, wHeight / 19);
 
-    p.textSize(20);
+    p.textSize(wWidth / 45);
     p.fill(255, 255, 180);
     p.text(player2_name, wWidth / 1.4, wHeight / 19);
 
-    p.textSize(20);
+    p.textSize(wWidth / 45);
     p.fill(255, 255, 180);
-    p.text(`score: ${player1_score}`, wWidth / 5, wHeight / 19);
+    p.text(`score: ${player1_score}`, wWidth /4.5, wHeight / 19);
 
-    p.textSize(20);
+    p.textSize(wWidth / 45);
     p.fill(255, 255, 180);
     p.text(`score: ${player2_score}`, wWidth / 1.15, wHeight / 19);
 
@@ -161,15 +157,16 @@ function Multiplayer() {
     /////////////// ractangle paddle
     c = p.color(65);
     p.fill(c);
-    p.rect(PaddleX, PaddleY, 20, 80);
+    p.rect(PaddleX, PaddleY, wWidth / 67, wHeight / 7.5);
 
     c = p.color(65);
     p.fill(c);
-    p.rect(PaddleX2, PaddleY2, 20, 80);
+    p.rect(PaddleX2, PaddleY2, wWidth / 67, wHeight / 7.5);
 
     ///////////////// set winner
     if (player1_score === 10) {
       updateFirebase(
+        'Game',
         "winner",
         {
           name: player1_name,
@@ -179,6 +176,7 @@ function Multiplayer() {
       );
     } else if (player2_score === 10) {
       updateFirebase(
+        'Game',
         "winner",
         {
           name: player2_name,
@@ -190,39 +188,63 @@ function Multiplayer() {
 
     ////////////// boundary checks
     if (ballX >= wWidth / 1.05) {
-      updateFirebase("speedy", 0, gameSessionId);
-      updateFirebase("ballX", wWidth / 2, gameSessionId);
-      updateFirebase("ballY", wHeight / 2.15, gameSessionId);
-      updateFirebase("player1_score", player1_score + 1, gameSessionId);
+      updateFirebase('Game',"speedy", 0, gameSessionId);
+      updateFirebase('Game',"ballX", wWidth / 2, gameSessionId);
+      updateFirebase('Game',"ballY", wHeight / 2.15, gameSessionId);
+      updateFirebase('Game',"player1_score", player1_score + 1, gameSessionId);
     }
     if (ballX <= wWidth / 20) {
-      updateFirebase("speedy", 0, gameSessionId);
-      updateFirebase("ballX", wWidth / 2, gameSessionId);
-      updateFirebase("ballY", wHeight / 2.15, gameSessionId);
-      updateFirebase("player2_score", player2_score + 1, gameSessionId);
+      updateFirebase('Game',"speedy", 0, gameSessionId);
+      updateFirebase('Game',"ballX", wWidth / 2, gameSessionId);
+      updateFirebase('Game',"ballY", wHeight / 2.15, gameSessionId);
+      updateFirebase('Game',"player2_score", player2_score + 1, gameSessionId);
     }
 
     if (ballY > wHeight / 1.25) {
-      updateFirebase("ballY", (ballY - 15), gameSessionId);
-      updateFirebase("speedy", speedy * -1, gameSessionId);
+      updateFirebase('Game',"ballY", ballY - 15, gameSessionId);
+      updateFirebase('Game',"speedy", speedy * -1, gameSessionId);
     }
     if (ballY < wHeight / 7) {
-      updateFirebase("ballY", (ballY + 15), gameSessionId);
-      updateFirebase("speedy", speedy * -1, gameSessionId);
+      updateFirebase('Game',"ballY", ballY + 15, gameSessionId);
+      updateFirebase('Game',"speedy", speedy * -1, gameSessionId);
     }
 
     /////////// Controller:
     if (user.email === player1_email) {
-      if (PaddleY - 15 >= wHeight / 7.1 && p.keyIsDown(p.UP_ARROW)) {
-        updateFirebase("PaddleY", (PaddleY - 15), gameSessionId);
-      } else if (PaddleY + 15 <= wHeight / 1.47 && p.keyIsDown(p.DOWN_ARROW)) {
-        updateFirebase("PaddleY", (PaddleY + 15), gameSessionId);
+      if (p.mouseIsPressed === true) {
+        updateFirebase(
+          'Game',
+          "PaddleY",
+          Math.min(wHeight / 1.47, Math.max(wHeight / 6.9, p.mouseY)),
+          gameSessionId
+        );
+      } else {
+        if (PaddleY - 15 >= wHeight / 7.1 && p.keyIsDown(p.UP_ARROW)) {
+          updateFirebase('Game',"PaddleY", PaddleY - 15, gameSessionId);
+        } else if (
+          PaddleY + 15 <= wHeight / 1.47 &&
+          p.keyIsDown(p.DOWN_ARROW)
+        ) {
+          updateFirebase('Game',"PaddleY", PaddleY + 15, gameSessionId);
+        }
       }
     } else {
-      if (PaddleY2 - 15 >= wHeight / 7.1 && p.keyIsDown(p.UP_ARROW)) {
-        updateFirebase("PaddleY2", (PaddleY2 - 15) , gameSessionId);
-      } else if (PaddleY2 + 15 <= wHeight / 1.47 && p.keyIsDown(p.DOWN_ARROW)) {
-        updateFirebase("PaddleY2", (PaddleY2 + 15), gameSessionId);
+      if (p.mouseIsPressed === true) {
+        updateFirebase(
+          'Game',
+          "PaddleY2",
+          Math.min(wHeight / 1.47, Math.max(wHeight / 6.9, p.mouseY)),
+          gameSessionId
+        );
+      } else {
+        if (PaddleY2 - 15 >= wHeight / 7.1 && p.keyIsDown(p.UP_ARROW)) {
+          updateFirebase('Game',"PaddleY2", PaddleY2 - 15, gameSessionId);
+        } else if (
+          PaddleY2 + 15 <= wHeight / 1.47 &&
+          p.keyIsDown(p.DOWN_ARROW)
+        ) {
+          updateFirebase('Game',"PaddleY2", PaddleY2 + 15, gameSessionId);
+        }
       }
     }
 
@@ -231,15 +253,16 @@ function Multiplayer() {
     let hitleft;
 
     hitright = ballHit(
-      p, 
-      ballX, 
-      ballY, 
-      10, 
-      PaddleX2, 
-      PaddleY2, 
-      25, 
-      85);
-   
+      p,
+      ballX,
+      ballY,
+      10,
+      PaddleX2,
+      PaddleY2,
+      wWidth / 67,
+      wHeight / 7.5
+    );
+
     hitleft = ballHit(
       p,
       ballX,
@@ -247,16 +270,17 @@ function Multiplayer() {
       10,
       PaddleX,
       PaddleY,
-      25,
-      85
+      wWidth / 67,
+      wHeight / 7.5
     );
 
     if (hitleft || hitright) {
-      if (hitleft) updateFirebase("ballX", (ballX + 20), gameSessionId);
-      else updateFirebase("ballX", (ballX - 20), gameSessionId);
+      if (hitleft) updateFirebase('Game',"ballX", ballX + 20, gameSessionId);
+      else updateFirebase('Game',"ballX", ballX - 20, gameSessionId);
 
-      updateFirebase("speedx", (speedx + 1) * -1, gameSessionId);
+      updateFirebase('Game',"speedx", (speedx + 1) * -1, gameSessionId);
       updateFirebase(
+        'Game',
         "speedy",
         dir[Math.round(Math.random())] * Math.random() * 10,
         gameSessionId
@@ -264,7 +288,7 @@ function Multiplayer() {
     }
 
     ////////// buttons styles
-    // let col = p.color(163, 183, 193);
+
     p5Btn.startBtn.position(wWidth / 2.15, wHeight / 1.12);
     p5Btn.startBtn.addClass("multimode-btn");
     p5Btn.startBtn.mousePressed(start);
@@ -282,14 +306,13 @@ function Multiplayer() {
     checkWinner();
   };
 
-
   ////////// start btn event
   const start = () => {
     if (startNexit === "start") {
       if (player1_name && player2_name) {
-        updateFirebase("speedx", 11, gameSessionId);
-        updateFirebase("speedy", 0, gameSessionId);
-        updateFirebase("start", true, gameSessionId);
+        updateFirebase('Game',"speedx", 11, gameSessionId);
+        updateFirebase('Game',"speedy", 0, gameSessionId);
+        updateFirebase('Game',"start", true, gameSessionId);
         setStartNexit("exit");
         p5Btn.startBtn.html("exit");
       } else {
@@ -299,9 +322,9 @@ function Multiplayer() {
         });
       }
     } else {
-    
       if (user.email === player1_email) {
         updateFirebase(
+          'Game',
           "winner",
           {
             name: player2_name,
@@ -311,6 +334,7 @@ function Multiplayer() {
         );
       } else {
         updateFirebase(
+          'Game',
           "winner",
           {
             name: player1_name,
@@ -348,7 +372,7 @@ function Multiplayer() {
           player1: player1_name,
           player2: player2_name,
           player1_score: player1_score,
-          player2_score: player2_score
+          player2_score: player2_score,
         },
       });
     } else if (isWinner) {

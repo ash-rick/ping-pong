@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { useLocation, useNavigate} from 'react-router-dom';
 import { Button } from '@material-ui/core';
-import {fireConfetti} from 'Playground/WinningScreen/confetti'
-import { getFromSession } from 'storage/sessionStorage';
+import {fireConfetti} from 'Gameplay/WinningScreen/confetti'
+import { getFromSession } from 'util/storage/sessionStorage';
 import { updateuserList } from 'Firebase/updateFirebase'; 
 import { toast } from "react-toastify";
 import './WinningScreen.scss'

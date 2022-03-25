@@ -9,12 +9,14 @@ import { db } from "Firebase/firebaseconfig.js";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { ref, onValue, update, set } from "firebase/database";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import { setInSession } from "storage/sessionStorage";
+import { setInSession } from "util/storage/sessionStorage";
 import LeaderBoard from "components/leaderboard/LeaderBoard";
 import { toast } from "react-toastify";
+import Notification from 'components/Notification/Notification';
+import UserList from "components/UserList/UserList";
 
 
-function Startscreen() {
+function Startscreen(props) {
   const [data, setData] = useState(null);
   const [ishared, setIshared] = useState(false);
   const [isLoggedin, setIsLoggedin] = useState(false);
@@ -142,7 +144,7 @@ function Startscreen() {
 
   return (
     <>
-      <Modal
+      {/* <Modal
         isOpen={modalIsOpen}
         onRequestClose={() => closeModal()}
         style={customStyles}
@@ -161,13 +163,11 @@ function Startscreen() {
               <Button
                 variant="contained"
                 className="enter-game-btn"
-                onClick={() => 
+                onClick={() =>
                   navigate(`/multiplayer/${uID}`, {
                     state: {
                       reset: false,
                       uid: uID,
-                      player1_name: data.players.player1.name,
-                      player2_name: data.players.player2.name,
                     },
                   })
                 }
@@ -194,7 +194,7 @@ function Startscreen() {
             </Button>
           </div>
         </div>
-      </Modal>
+      </Modal> */}
       <div className="starting-page">
         <div className="login-page">
           <p className="game-name">PING PONG</p>
@@ -204,14 +204,14 @@ function Startscreen() {
               {!ishared && (
                 <Button
                   className="startscreen-btn"
-                  onClick={() => navigate("/playsolo")}
+                  onClick={() => props.parentCallback("singleplayer")}
                 >
                   singleplayer
                 </Button>
               )}
               <Button
                 className="startscreen-btn"
-                onClick={() => setIsOpen(true)}
+                onClick={() => props.parentCallback("multiplayer")}
               >
                 multiplayer
               </Button>
@@ -219,6 +219,8 @@ function Startscreen() {
           </div>
         </div>
       </div>
+      <Notification />
+      <UserList />
     </>
   );
 }

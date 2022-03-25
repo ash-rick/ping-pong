@@ -7,7 +7,7 @@ import './Singleplayer.scss';
 
 
 
-function Singleplayer() {
+function Singleplayer(props) {
   let wWidth = window.innerWidth;
   let wHeight = window.innerHeight;
 
@@ -40,6 +40,7 @@ function Singleplayer() {
   let deficulty;
 
   const navigate = useNavigate();
+
   const setup = (p) => {
     p.canvas = p.createCanvas(wWidth, wHeight);
 
@@ -101,7 +102,7 @@ function Singleplayer() {
     p.fill(midc);
     p.circle(wWidth / 2, wHeight / 2.15, wWidth / 10);
 
-    p.textSize(wWidth/25);
+    p.textSize(wWidth / 25);
     p.fill(255, 255, 255);
     p.text("Ping Pong", wWidth / 2.46, wHeight / 12);
 
@@ -128,13 +129,15 @@ function Singleplayer() {
     ////////////////////winning screen
     if (winPlayer) {
       if (winPlayer === "you") {
-        navigate("/win", {
-          state: {},
-        });
+        // navigate("/win", {
+        //   state: {},
+        // });
+        props.parentCallback("winning")
       } else {
-        navigate("/youlose", {
-          state: {},
-        });
+        // navigate("/youlose", {
+        //   state: {},
+        // });
+        props.parentCallback("loosing");
       }
     }
 
@@ -166,7 +169,7 @@ function Singleplayer() {
         winPlayer = "computer";
       }
     }
-    if (ballY > wHeight / 1.25) {
+    if (ballY > wHeight / 1.27) {
       speedx *= 1;
       speedy *= -1;
     }
@@ -176,13 +179,16 @@ function Singleplayer() {
     }
 
     ///////////Controller
-
-    if (PaddleY - 5 >= wHeight / 6.9 && p.keyIsDown(p.UP_ARROW)) {
-      PaddleY = PaddleY - 15;
-    } else if (PaddleY + 5 <= wHeight / 1.47 && p.keyIsDown(p.DOWN_ARROW)) {
-      PaddleY = PaddleY + 15;
+    if (p.mouseIsPressed === true) {
+      PaddleY = Math.min(wHeight / 1.47, Math.max(wHeight / 6.9, p.mouseY));
     }
-
+    else {
+      if (PaddleY - 15 >= wHeight / 6.9 && p.keyIsDown(p.UP_ARROW)) {
+        PaddleY = PaddleY - 15;
+      } else if (PaddleY + 15 <= wHeight / 1.47 && p.keyIsDown(p.DOWN_ARROW)) {
+        PaddleY = PaddleY + 15;
+      }
+    }
     /////////////// paddles and ball
 
     let c = p.color(255, 204, 0);
@@ -197,7 +203,7 @@ function Singleplayer() {
     p.fill(c);
     p.rect(PaddleX2, PaddleY2, wWidth / 67, wHeight / 7.5);
 
-    //////////////////////////-ball hit case
+    //- ball hit case
     let hitRight = ballHit(
       p,
       ballX,
@@ -225,6 +231,7 @@ function Singleplayer() {
     }
 
    
+    //- btn style and respective function call
     resetBtn.addClass("singleplay-btn");
     resetBtn.mousePressed(reset);
 
@@ -241,17 +248,19 @@ function Singleplayer() {
 
     sel.changed(changeDeficulty);
 
+   
     // for ai move
-    if (ballX > wWidth - (100 + Math.floor(Math.random() * followBall))) {
+    if (ballX > wWidth - (200 + Math.floor(Math.random() * followBall))) {
       PaddleY2 = aiMove(
         wHeight / 1.5,
         wHeight / 7.5,
         ballY,
-        Math.random() * miss
+        0
       );
     }
   };
 
+  //- pause function
   const pause = () => {
     if (speedx === 0 && speedy === 0) {
       pauseBtn.html("pause");
@@ -266,6 +275,7 @@ function Singleplayer() {
     }
   };
 
+  //- reset and start function
   const reset = () => {
     resetBtn.position(wWidth / 2.2, wHeight / 1.11);
 
@@ -300,7 +310,7 @@ function Singleplayer() {
     }
   };
 
-  
+  //- themes
   const changeTheme = () => {
     if (themeType === "dark") {
       themeType = "light";
@@ -311,10 +321,9 @@ function Singleplayer() {
     }
   };
 
+  //- set deficulty 
   const changeDeficulty = () => {
-
     deficulty = sel.selected();
-    
 
     switch (deficulty) {
       case "easy":
@@ -339,7 +348,7 @@ function Singleplayer() {
     }
   };
 
-  
+  // onclick exit 
   const exitFromGameSession = () => {
     navigate("/");
   };
