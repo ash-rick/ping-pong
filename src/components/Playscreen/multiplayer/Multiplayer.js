@@ -9,7 +9,7 @@ import { getFromSession } from "util/storage/sessionStorage";
 import { ballHit } from "util/ballHitPaddle";
 import "./Multiplayer.scss";
 
-function Multiplayer() {
+function Multiplayer(props) {
   let wWidth = window.innerWidth;
   let wHeight = window.innerHeight;
 
@@ -34,12 +34,12 @@ function Multiplayer() {
   const [p5Btn, setP5Btn] = useState({});
   const [themeType, setThemeType] = useState("light theme");
   const [startNexit, setStartNexit] = useState("start");
-  const [resetBtn, setResetBtn] = useState(true);
+  // const [resetBtn, setResetBtn] = useState(true);
 
   const navigate = useNavigate();
 
-  let resetGame = state.reset;
-  let gameSessionId = state.uid;
+  // let resetGame = state.reset;
+  let gameSessionId = props.gameSessionId;
 
   let PaddleX;
   let PaddleX2;
@@ -66,22 +66,22 @@ function Multiplayer() {
   }, [gameSessionId]);
 
   //////////////game reset
-  useEffect(() => {
-    if (resetGame && resetBtn) {
-      updateFirebase('Game',"ballX", wWidth / 2, gameSessionId);
-      updateFirebase('Game',"ballY", wHeight / 2.15, gameSessionId);
-      updateFirebase('Game',"player1_score", 0, gameSessionId);
-      updateFirebase('Game',"player2_score", 0, gameSessionId);
-      updateFirebase('Game',"speedx", 0, gameSessionId);
-      updateFirebase('Game',"speedy", 0, gameSessionId);
-      updateFirebase('Game',"winner", null, gameSessionId);
-      updateFirebase('Game',"start", false, gameSessionId);
-      updateFirebase('Game',"PaddleY", wHeight / 2.5, gameSessionId);
-      updateFirebase('Game',"PaddleY2", wHeight / 2.5, gameSessionId);
+  // useEffect(() => {
+  //   if (resetGame && resetBtn) {
+  //     updateFirebase('Game',"ballX", wWidth / 2, gameSessionId);
+  //     updateFirebase('Game',"ballY", wHeight / 2.15, gameSessionId);
+  //     updateFirebase('Game',"player1_score", 0, gameSessionId);
+  //     updateFirebase('Game',"player2_score", 0, gameSessionId);
+  //     updateFirebase('Game',"speedx", 0, gameSessionId);
+  //     updateFirebase('Game',"speedy", 0, gameSessionId);
+  //     updateFirebase('Game',"winner", null, gameSessionId);
+  //     updateFirebase('Game',"start", false, gameSessionId);
+  //     updateFirebase('Game',"PaddleY", wHeight / 2.5, gameSessionId);
+  //     updateFirebase('Game',"PaddleY2", wHeight / 2.5, gameSessionId);
 
-      return () => setResetBtn(false);
-    }
-  }, [gameSessionId, resetGame, resetBtn, wWidth, wHeight]);
+  //     return () => setResetBtn(false);
+  //   }
+  // }, [gameSessionId, resetGame, resetBtn, wWidth, wHeight]);
 
   const setup = (p) => {
     p.canvas = p.createCanvas(wWidth, wHeight);
@@ -365,27 +365,29 @@ function Multiplayer() {
 
   const checkWinner = () => {
     if (isWinner && isWinner.email === user.email) {
-      navigate("/win", {
-        state: {
-          winPlayer: isWinner,
-          gameId: gameSessionId,
-          player1: player1_name,
-          player2: player2_name,
-          player1_score: player1_score,
-          player2_score: player2_score,
-        },
-      });
+      props.parentCallback('winning')
+      // navigate("/win", {
+      //   state: {
+      //     winPlayer: isWinner,
+      //     gameId: gameSessionId,
+      //     player1: player1_name,
+      //     player2: player2_name,
+      //     player1_score: player1_score,
+      //     player2_score: player2_score,
+      //   },
+      // });
     } else if (isWinner) {
-      navigate("/youlose", {
-        state: {
-          losePlayer: user,
-          gameId: gameSessionId,
-          player1: player1_name,
-          player2: player2_name,
-          player1_score: player1_score,
-          player2_score: player2_score,
-        },
-      });
+      props.parentCallback("loosing");
+      // navigate("/youlose", {
+      //   state: {
+      //     losePlayer: user,
+      //     gameId: gameSessionId,
+      //     player1: player1_name,
+      //     player2: player2_name,
+      //     player1_score: player1_score,
+      //     player2_score: player2_score,
+      //   },
+      // });
     }
   };
 

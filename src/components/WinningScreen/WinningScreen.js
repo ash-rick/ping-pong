@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useLocation, useNavigate} from 'react-router-dom';
 import { Button } from '@material-ui/core';
-import {fireConfetti} from 'Gameplay/WinningScreen/confetti'
+import {fireConfetti} from 'components/WinningScreen/confetti'
 import { getFromSession } from 'util/storage/sessionStorage';
 import { updateuserList } from 'Firebase/updateFirebase'; 
 import { toast } from "react-toastify";

@@ -3,7 +3,7 @@ import StarRateIcon from "@mui/icons-material/StarRate";
 import "./LeaderBoard.scss";
 import React, { useCallback, useEffect, useState } from "react";
 import { getExistingPlayerData } from "Firebase/updateFirebase";
-import pingPong from "../../constants/game-logos/ping-pong.jpeg";
+import pingPong from "../../constants/game-logos/ping-pong.ico";
 import ticTac from "../../constants/game-logos/tic-tac.ico";
 import LeaderBoardSkeleton from "./LeaderBoardSkeleton";
 

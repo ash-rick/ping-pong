@@ -1,23 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
 import { ballHit } from "util/ballHitPaddle";
 import { aiMove } from "util/comMove";
-import { useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Sketch from "react-p5";
-import './Singleplayer.scss';
-
-
+import "./Singleplayer.scss";
+import WinningScreen from "components/WinningScreen/WinningScreen";
+import LoosingScreen from "components/LoosingScreen/LoosingScreen";
 
 function Singleplayer(props) {
+  const [winner, setWinner] = useState("");
+
   let wWidth = window.innerWidth;
   let wHeight = window.innerHeight;
 
   let ballX;
   let ballY;
-  let PaddleY ;
+  let PaddleY;
   let PaddleY2;
+  let player1_name = "win";
   let player1_score;
   let player2_score;
- 
+
   var PaddleX, PaddleX2;
   var speedx, speedy;
   let setSpeed;
@@ -33,12 +36,15 @@ function Singleplayer(props) {
   let winPlayer;
   let themeType;
 
-  let miss ;
-  
+  let miss;
+
   let followBall;
   let sel;
   let deficulty;
 
+  const setWinnerName = (val) => {
+    setWinner(val);
+  }
   const navigate = useNavigate();
 
   const setup = (p) => {
@@ -56,9 +62,8 @@ function Singleplayer(props) {
     PaddleX2 = wWidth / 1.0675;
     dir = [1, -1];
 
-
     miss = 120;
-  
+
     followBall = 50;
     deficulty = "easy";
 
@@ -78,7 +83,6 @@ function Singleplayer(props) {
 
     themeBtn = p.createButton(themeType);
     themeBtn.position(wWidth / 1.22, wHeight / 1.11);
-
   };
 
   const draw = (p, parent) => {
@@ -124,20 +128,15 @@ function Singleplayer(props) {
 
     p.textSize(wWidth / 45);
     p.fill(170, 240, 209);
-    p.text("Difficulty", wWidth/ 18, wHeight / 1.06);
+    p.text("Difficulty", wWidth / 18, wHeight / 1.06);
 
     ////////////////////winning screen
     if (winPlayer) {
       if (winPlayer === "you") {
-        // navigate("/win", {
-        //   state: {},
-        // });
-        props.parentCallback("winning")
+        setWinnerName("you");
+        // setWinner("you");
       } else {
-        // navigate("/youlose", {
-        //   state: {},
-        // });
-        props.parentCallback("loosing");
+        setWinnerName("computer");
       }
     }
 
@@ -154,7 +153,7 @@ function Singleplayer(props) {
       ballY = wHeight / 2.15;
       player1_score += 1;
 
-      if (player1_score === 10) {
+      if (player1_score === 2) {
         winPlayer = "you";
       }
     }
@@ -165,7 +164,7 @@ function Singleplayer(props) {
       ballY = wHeight / 2.15;
       player2_score += 1;
 
-      if (player2_score === 10) {
+      if (player2_score === 2) {
         winPlayer = "computer";
       }
     }
@@ -181,8 +180,7 @@ function Singleplayer(props) {
     ///////////Controller
     if (p.mouseIsPressed === true) {
       PaddleY = Math.min(wHeight / 1.47, Math.max(wHeight / 6.9, p.mouseY));
-    }
-    else {
+    } else {
       if (PaddleY - 15 >= wHeight / 6.9 && p.keyIsDown(p.UP_ARROW)) {
         PaddleY = PaddleY - 15;
       } else if (PaddleY + 15 <= wHeight / 1.47 && p.keyIsDown(p.DOWN_ARROW)) {
@@ -230,7 +228,6 @@ function Singleplayer(props) {
       speedy = dir[Math.round(Math.random())] * Math.random() * 10;
     }
 
-   
     //- btn style and respective function call
     resetBtn.addClass("singleplay-btn");
     resetBtn.mousePressed(reset);
@@ -248,15 +245,9 @@ function Singleplayer(props) {
 
     sel.changed(changeDeficulty);
 
-   
     // for ai move
     if (ballX > wWidth - (200 + Math.floor(Math.random() * followBall))) {
-      PaddleY2 = aiMove(
-        wHeight / 1.5,
-        wHeight / 7.5,
-        ballY,
-        0
-      );
+      PaddleY2 = aiMove(wHeight / 1.5, wHeight / 7.5, ballY, 0);
     }
   };
 
@@ -280,31 +271,29 @@ function Singleplayer(props) {
     resetBtn.position(wWidth / 2.2, wHeight / 1.11);
 
     if (startNreset === "reset") {
-        resetBtn.html("start");
-        startNreset = "start";
-        sel.removeAttribute("disabled");
-        pauseBtn.hide();
-        player1_score = 0;
-        player2_score = 0;
-        PaddleX = wWidth / 20;
-        PaddleY = wHeight / 2.5;
-        PaddleX2 = wWidth / 1.067;
-        PaddleY2 = wHeight / 2.5;
-        ballX = wWidth / 2;
-        ballY = wHeight / 2.15;
-        speedx = 0;
-        speedy = 0;
-
+      resetBtn.html("start");
+      startNreset = "start";
+      sel.removeAttribute("disabled");
+      pauseBtn.hide();
+      player1_score = 0;
+      player2_score = 0;
+      PaddleX = wWidth / 20;
+      PaddleY = wHeight / 2.5;
+      PaddleX2 = wWidth / 1.067;
+      PaddleY2 = wHeight / 2.5;
+      ballX = wWidth / 2;
+      ballY = wHeight / 2.15;
+      speedx = 0;
+      speedy = 0;
     } else if (startNreset === "start") {
-       
-        speedx = setSpeed ? setSpeed : 10;
-        speedy = 0;
+      speedx = setSpeed ? setSpeed : 10;
+      speedy = 0;
 
-        startNreset = "reset";
-        resetBtn.html("reset");
-        pauseBtn.html("pause");
-        sel.attribute("disabled", true);
-        pauseBtn.show();
+      startNreset = "reset";
+      resetBtn.html("reset");
+      pauseBtn.html("pause");
+      sel.attribute("disabled", true);
+      pauseBtn.show();
     } else {
       exitFromGameSession();
     }
@@ -321,26 +310,23 @@ function Singleplayer(props) {
     }
   };
 
-  //- set deficulty 
+  //- set deficulty
   const changeDeficulty = () => {
     deficulty = sel.selected();
 
     switch (deficulty) {
       case "easy":
-        
         miss = 130;
         followBall = 70;
         setSpeed = 8;
         break;
       case "medium":
-        
-        miss = 100; 
+        miss = 100;
         followBall = 120;
         setSpeed = 15;
         break;
       case "hard":
-    
-        miss = 90
+        miss = 90;
         followBall = 180;
         setSpeed = 22;
         break;
@@ -348,14 +334,32 @@ function Singleplayer(props) {
     }
   };
 
-  // onclick exit 
+  // onclick exit
   const exitFromGameSession = () => {
     navigate("/");
   };
 
   return (
     <div className="playing-page">
-      <Sketch setup={setup} draw={draw}></Sketch>
+      {winner ? (
+        winner === "you" ? (
+          <WinningScreen
+            parentCallback={setWinnerName}
+            winner={player1_name}
+            player1_score={player1_score}
+            player2_score={player2_score}
+          />
+        ) : (
+          <LoosingScreen
+            parentCallback={setWinnerName}
+            looser={player1_name}
+            player1_score={player1_score}
+            player2_score={player2_score}
+          />
+        )
+      ) : (
+        <Sketch setup={setup} draw={draw}></Sketch>
+      )}
     </div>
   );
 }

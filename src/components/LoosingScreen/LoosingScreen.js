@@ -6,8 +6,8 @@ import { updateuserList } from "Firebase/updateFirebase";
 
 import "./LoosingScreen.scss";
 
-function LoosingScreen() {
-  // const { state } = useLocation();
+function LoosingScreen(props) {
+  const { state } = useLocation();
   // let preGameId = state.gameId;
   // let looser = state.losePlayer;
   // let player1 = state.player1;
@@ -34,26 +34,25 @@ function LoosingScreen() {
   //     );
   // })
 
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   return (
     <>
-      {/* <div className="winning-background">
+      <div className="winning-background">
         <div className="winner-name-div">
-          <p className="winner-name">
-            {preGameId ? looser.name : "You "} lost the game
-          </p>
+          <p className="winner-name">you lost the game</p>
         </div>
         <div className="winning-screen-btn">
           <Button
-            onClick={() =>
-              navigate(navigateHere, {
-                state: {
-                  reset: true,
-                  uid: preGameId,
-                  player1_name: player1,
-                  player2_name: player2,
-                },
-              })
+            onClick={
+              () => props.parentCallback("")
+              // navigate(navigateHere, {
+              //   state: {
+              //     reset: true,
+              //     uid: preGameId,
+              //     player1_name: player1,
+              //     player2_name: player2,
+              //   },
+              // })
             }
             className="new-game"
           >
@@ -63,8 +62,7 @@ function LoosingScreen() {
             Back
           </Button>
         </div>
-      </div> */}
-      lost
+      </div>
     </>
   );
 }

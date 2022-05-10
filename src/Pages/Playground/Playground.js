@@ -1,10 +1,10 @@
 
 import React, {useState} from 'react'
-import Singleplayer from '../Gameplay/Playscreen/singleplayer/Singleplayer';
-import Multiplayer from "../Gameplay/Playscreen/multiplayer/Multiplayer";
-import Startscreen from '../Gameplay/Startscreen/Startscreen'
-import WinningScreen from '../Gameplay/WinningScreen/WinningScreen';
-import LoosingScreen from '../Gameplay/LoosingScreen/LoosingScreen';
+import Singleplayer from '../../components/Playscreen/singleplayer/Singleplayer';
+import Multiplayer from "../../components/Playscreen/multiplayer/Multiplayer";
+import Startscreen from '../../components/Startscreen/Startscreen'
+import WinningScreen from '../../components/WinningScreen/WinningScreen';
+import LoosingScreen from '../../components/LoosingScreen/LoosingScreen';
 
 function Playground() {
     const [toHere, setToHere] = useState('');
@@ -14,7 +14,7 @@ function Playground() {
           case "singleplayer":
             return <Singleplayer parentCallback={handleCallback} />;
           case "multiplayer":
-            return <Multiplayer parentCallback={handleCallback} />;
+            return <Multiplayer gameSessionId={'123456789'} parentCallback={handleCallback} />;
           case "winning":
             return <WinningScreen />;
           case "loosing":
