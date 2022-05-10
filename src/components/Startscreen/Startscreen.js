@@ -13,7 +13,6 @@ import { setInSession } from "util/storage/sessionStorage";
 import LeaderBoard from "components/leaderboard/LeaderBoard";
 import { toast } from "react-toastify";
 import Notification from 'components/Notification/Notification';
-import UserList from "components/UserList/UserList";
 
 
 function Startscreen(props) {
@@ -144,57 +143,7 @@ function Startscreen(props) {
 
   return (
     <>
-      {/* <Modal
-        isOpen={modalIsOpen}
-        onRequestClose={() => closeModal()}
-        style={customStyles}
-        contentLabel="Example Modal"
-      >
-        <div className="modal-content">
-          {isLoggedin ? (
-            <div>
-              {!ishared && (
-                <CopyToClipboard text={`${gameSessionUrl}${uID}`}>
-                  <Button className="copy-link-btn" variant="outlined">
-                    Click to Copy link and share with your firend!
-                  </Button>
-                </CopyToClipboard>
-              )}
-              <Button
-                variant="contained"
-                className="enter-game-btn"
-                onClick={() =>
-                  navigate(`/multiplayer/${uID}`, {
-                    state: {
-                      reset: false,
-                      uid: uID,
-                    },
-                  })
-                }
-              >
-                Enter Game
-              </Button>
-            </div>
-          ) : (
-            <div className="signin-with-google">
-              <Button className="g-signin" onClick={() => signInWithGoggle()}>
-                <img
-                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRxJzbnX4yyb7ekXoUeb4PXTamKvQ78mefFCw&usqp=CAU"
-                  alt="google"
-                  height="20%"
-                  width="20%"
-                />
-                Sign in with Google
-              </Button>
-            </div>
-          )}
-          <div className="modal-bottom">
-            <Button className="close-btn" onClick={() => closeModal()}>
-              close
-            </Button>
-          </div>
-        </div>
-      </Modal> */}
+    
       <div className="starting-page">
         <div className="login-page">
           <p className="game-name">PING PONG</p>
@@ -220,7 +169,6 @@ function Startscreen(props) {
         </div>
       </div>
       <Notification />
-      <UserList />
     </>
   );
 }
